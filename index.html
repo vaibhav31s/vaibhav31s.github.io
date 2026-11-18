@@ -7,12 +7,12 @@
 <meta name="description" content="Vaibhav Gawad, backend engineer at Uber building scalable systems in Go, Java and Python.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
   (function () {
     var t = null;
-    try { t = localStorage.getItem('vg-theme-d'); } catch (e) {}
-    if (!t) t = 'dark';
+    try { t = localStorage.getItem('vg-theme-b'); } catch (e) {}
+    if (!t) t = 'light';
     document.documentElement.setAttribute('data-theme', t);
   })();
 </script>
@@ -282,10 +282,10 @@
   .term-bar span { margin-left: 0.5rem; flex: 1; }
   .term-bar button { all: unset; cursor: pointer; color: #8b93a3; padding: 0 0.3rem; }
   .term-out { padding: 0.9rem 1rem 0.3rem; max-height: 55vh; overflow-y: auto; white-space: pre-wrap; line-height: 1.7; }
-  .term-out .p { color: #fbbf24; } .term-out .g { color: #4ade80; } .term-out .b { color: #60a5fa; } .term-out .dim { color: #8b93a3; }
+  .term-out .p { color: #2ee58f; } .term-out .g { color: #4ade80; } .term-out .b { color: #60a5fa; } .term-out .dim { color: #8b93a3; }
   .term form { display: flex; gap: 0.6rem; padding: 0.3rem 1rem 1rem; }
-  .term form label { color: #fbbf24; }
-  .term input { flex: 1; background: transparent; border: 0; color: inherit; font: inherit; caret-color: #fbbf24; outline: none; }
+  .term form label { color: #2ee58f; }
+  .term input { flex: 1; background: transparent; border: 0; color: inherit; font: inherit; caret-color: #2ee58f; outline: none; }
   .hint-key { font-family: var(--mono); font-size: 0.7rem; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 0.3rem; }
 
   /* views */
@@ -317,14 +317,14 @@
   /* ===== Direction D: the route ===== */
   :root {
     --bg: #f4f4f0; --fg: #0f1115; --muted: #555b66; --border: #d9d9d2; --card: #ffffff; --soft: #ebebe6; --soft-2: #f7f7f4;
-    --accent: #6b5200; --hl: #ffd400; --grid: #e7e7e1; --road: #0f1115; --lane: #5b606b;
-    --spot: rgba(255, 212, 0, 0.22); --glow: rgba(255, 212, 0, 0.10); --code-bg: #f0f0eb;
+    --accent: #6b5200; --hl: #2458e6; --grid: #e7e7e1; --road: #0f1115; --lane: #5b606b;
+    --spot: rgba(36, 88, 230, 0.22); --glow: rgba(36, 88, 230, 0.10); --code-bg: #f0f0eb;
     --display: "Sora", "Inter", system-ui, sans-serif;
   }
   [data-theme="dark"] {
     --bg: #0f1115; --fg: #ffffff; --muted: #b3b8c2; --border: #2b2f38; --card: #171a20; --soft: #1b1e25; --soft-2: #14171c;
-    --accent: #ffd400; --grid: #1b1e25; --road: #1b1e25; --lane: #5b606b;
-    --spot: rgba(255, 212, 0, 0.12); --glow: rgba(255, 212, 0, 0.05); --code-bg: #14171c;
+    --accent: #2458e6; --grid: #1b1e25; --road: #1b1e25; --lane: #5b606b;
+    --spot: rgba(36, 88, 230, 0.12); --glow: rgba(36, 88, 230, 0.05); --code-bg: #14171c;
   }
   body { padding-top: 44px; background-image: linear-gradient(var(--grid) 2px, transparent 2px), linear-gradient(90deg, var(--grid) 2px, transparent 2px); background-size: 120px 120px; }
   section { scroll-margin-top: 4.5rem; }
@@ -359,7 +359,7 @@
   .trip { flex: 1 1 22rem; min-width: 0; background: #ffffff; color: #0f1115; border-radius: 28px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; box-shadow: 0 30px 60px -30px rgba(0,0,0,.55); border: 1px solid #d9d9d2; }
   .trip-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
   .trip-head b { font-family: var(--display); font-weight: 800; font-size: 1.2rem; }
-  .trip-head span { background: #0f1115; color: #ffd400; font-weight: 600; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 999px; white-space: nowrap; }
+  .trip-head span { background: #0f1115; color: #2458e6; font-weight: 600; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 999px; white-space: nowrap; }
   .stop { display: grid; grid-template-columns: 20px 1fr auto; gap: 0.85rem; align-items: start; }
   .stop .rail { display: flex; flex-direction: column; align-items: center; }
   .stop .rail i { width: 12px; height: 12px; border-radius: 50%; background: #9aa0aa; margin-top: 5px; display: block; }
@@ -368,10 +368,10 @@
   .stop small { display: block; font-size: 0.85rem; color: #555b66; }
   .stop time { font-size: 0.85rem; color: #555b66; white-space: nowrap; }
   .stop.cur { background: #0f1115; color: #ffffff; border-radius: 16px; padding: 0.85rem 0.9rem 0.85rem 0; align-items: center; }
-  .stop.cur .rail i { width: 14px; height: 14px; border-radius: 0; background: #ffd400; margin: 0 0 0 4px; }
+  .stop.cur .rail i { width: 14px; height: 14px; border-radius: 0; background: #2458e6; margin: 0 0 0 4px; }
   .stop.cur strong { font-family: var(--display); font-weight: 800; font-size: 1.6rem; line-height: 1; }
   .stop.cur small { color: #c4c8d0; margin-top: 0.25rem; }
-  .stop.cur time { color: #ffd400; font-weight: 600; }
+  .stop.cur time { color: #2458e6; font-weight: 600; }
   .trip-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; border-top: 1px solid #d4d7dd; padding-top: 1rem; }
   .trip-stats b { display: block; font-family: var(--display); font-weight: 800; font-size: 1.45rem; letter-spacing: -0.02em; }
   .trip-stats span { font-size: 0.8rem; color: #555b66; }
@@ -386,7 +386,7 @@
   .row .more ul { padding-left: 3.4rem; }
   @media (max-width: 560px) { .row .d { padding-left: 2.35rem; } .row .more ul { padding-left: 2.4rem; } }
 
-  /* headline: words rise in, then a yellow line draws under Uber */
+  /* headline: words rise in, then a line draws under a word */
   .hw span { display: inline-block; opacity: 0; transform: translateY(0.5em); animation: rise .55s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--w) * 80ms + 150ms); }
   @keyframes rise { to { opacity: 1; transform: none; } }
   .hw .u { position: relative; }
@@ -399,7 +399,7 @@
   .trip .stop .rail u { transform: scaleY(0); transform-origin: top; animation: grow .26s linear forwards; animation-delay: calc(var(--s) * 260ms + 900ms); }
   @keyframes grow { to { transform: scaleY(1); } }
   .trip .stop.cur { animation-name: arrive, pulse; animation-duration: .45s, 2.4s; animation-delay: calc(var(--s) * 260ms + 700ms), 2.4s; animation-iteration-count: 1, infinite; animation-timing-function: ease-out, ease-in-out; }
-  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 212, 0, 0); } 50% { box-shadow: 0 0 0 6px rgba(255, 212, 0, 0.45); } }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(36, 88, 230, 0); } 50% { box-shadow: 0 0 0 6px rgba(36, 88, 230, 0.45); } }
 
   /* ticker */
   .ticker { width: 100vw; margin: 2.2rem 0 0 calc(50% - 50vw); background: var(--hl); color: #0f1115; overflow: hidden; border-block: 2px solid #0f1115; }
@@ -429,43 +429,185 @@
     .hw .u::after { animation: none; transform: none; }
     .ticker .track { animation: none; }
   }
+
+  /* ===== Staff badge theme: black and white base, bold colour ===== */
+  :root {
+    --bg: #ffffff; --fg: #000000; --muted: #4a4a4a; --border: #e2e2e2; --card: #ffffff; --soft: #f3f3f3; --soft-2: #f7f7f7;
+    --accent: #2458e6; --hl: #2458e6; --road: #ffffff; --lane: #b0b0b0;
+    --spot: rgba(36, 88, 230, 0.10); --glow: rgba(36, 88, 230, 0.05); --code-bg: #f5f5f5;
+    --display: "Inter", system-ui, sans-serif;
+    --mint: #2ee58f; --cyan: #22d3ee; --violet: #7c3aed; --coral: #ff5a4f; --pink: #ff6fb1; --blue: #2458e6;
+    --n1: #2458e6; --n2: #7c3aed; --n3: #d92d20;
+  }
+  [data-theme="dark"] {
+    --bg: #000000; --fg: #ffffff; --muted: #c4c4c4; --border: #2e2e2e; --card: #141414; --soft: #1c1c1c; --soft-2: #0d0d0d;
+    --accent: #7aa2ff; --road: #000000; --lane: #5e5e5e;
+    --spot: rgba(122, 162, 255, 0.14); --glow: rgba(122, 162, 255, 0.06); --code-bg: #141414;
+    --n1: #7aa2ff; --n2: #b79bf7; --n3: #ff7a70;
+  }
+  body { background-image: none; }
+  .road { border-bottom: 1px solid var(--border); }
+  .pill { background: var(--fg); color: var(--bg); }
+  #leetcode .pill { background: var(--violet); color: #fff; }
+  #projects .pill { background: var(--mint); color: #000; }
+  #hackathons .pill { background: var(--coral); color: #000; }
+  #contact .pill { background: var(--pink); color: #000; }
+  .btn { background: var(--blue); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 2px solid var(--fg); }
+  .lk { background: var(--fg); color: var(--bg); }
+  .chip[aria-pressed="true"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+  #about h2.sec::before { background: var(--mint); }
+  #education h2.sec::before { background: var(--violet); }
+  #skills h2.sec::before { background: var(--coral); }
+  #stats h2.sec::before { background: var(--pink); }
+  #writing h2.sec::before { background: var(--cyan); }
+  .row.now { border: 2px solid var(--blue); }
+  .row.now .logo { background: var(--blue) !important; }
+  #work .row:nth-child(2) .logo, #work .row:nth-child(3) .logo { background: var(--violet) !important; }
+  #work .row:nth-child(4) .logo { background: var(--cyan) !important; }
+  #work .row:nth-child(5) .logo { background: var(--pink) !important; }
+  #education .row:nth-child(1) .logo { background: var(--mint) !important; }
+  #education .row:nth-child(2) .logo { background: var(--coral) !important; }
+  .tl .win, [data-theme="dark"] .tl .win { background: var(--mint); color: #000; }
+  .badges .badge { font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 999px; }
+  .badges .badge:nth-child(6n+1) { background: var(--cyan); color: #000; }
+  .badges .badge:nth-child(6n+2) { background: var(--coral); color: #000; }
+  .badges .badge:nth-child(6n+3) { background: var(--violet); color: #fff; }
+  .badges .badge:nth-child(6n+4) { background: var(--mint); color: #000; }
+  .badges .badge:nth-child(6n+5) { background: var(--pink); color: #000; }
+  .badges .badge:nth-child(6n) { background: var(--blue); color: #fff; }
+  .c-easy { color: #0e8345; } .c-med { color: var(--accent); } .c-hard { color: #d92d20; }
+  [data-theme="dark"] .c-easy { color: #2ee58f; } [data-theme="dark"] .c-hard { color: #ff7a70; }
+  .ticker { background: #000; color: #fff; border-block: 0; }
+  [data-theme="dark"] .ticker { background: #fff; color: #000; }
+  .ticker li::after { background: var(--mint); }
+  .ticker li:nth-child(5n+2)::after { background: var(--cyan); }
+  .ticker li:nth-child(5n+3)::after { background: var(--violet); }
+  .ticker li:nth-child(5n+4)::after { background: var(--coral); }
+  .ticker li:nth-child(5n)::after { background: var(--pink); }
+
+  /* hero */
+  .hero-b { width: min(1180px, calc(100vw - 2.5rem)); margin-left: calc(50% - min(1180px, 100vw - 2.5rem) / 2); display: flex; flex-wrap: wrap; gap: 2.5rem 3rem; align-items: center; padding: 1rem 0 0.5rem; }
+  .hero-b .lead { flex: 999 1 30rem; min-width: 0; display: flex; flex-direction: column; gap: 1.4rem; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .tag-pill { font-weight: 700; font-size: 0.85rem; padding: 0.45rem 0.85rem; border-radius: 999px; }
+  .tag-pill.g { background: var(--mint); color: #000; }
+  .tag-pill.k { background: var(--fg); color: var(--bg); }
+  .hero-b h1 { margin: 0; font-weight: 800; font-size: clamp(2.8rem, 7.6vw, 6.6rem); line-height: 0.95; letter-spacing: -0.05em; }
+  .hero-b h1 .dot { font-style: normal; color: var(--accent); }
+  .hero-b .sub { margin: 0; max-width: 32rem; font-size: clamp(1.05rem, 2.2vw, 1.25rem); line-height: 1.5; color: var(--muted); }
+  .hero-b .cta { justify-content: flex-start; margin-top: 0; }
+  .hero-b .btn { font-size: 1rem; padding: 0.95rem 1.5rem; border-radius: 12px; }
+  .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.75rem; max-width: 40rem; }
+  .hero-stats div { background: var(--soft); border-radius: 18px; padding: 1rem 1.1rem; }
+  .hero-stats b { display: block; font-weight: 800; font-size: 2rem; letter-spacing: -0.03em; line-height: 1.15; white-space: nowrap; }
+  .hero-stats div:nth-child(1) b { color: var(--n1); } .hero-stats div:nth-child(2) b { color: var(--n2); } .hero-stats div:nth-child(3) b { color: var(--n3); }
+  .hero-stats span { font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 560px) { .hero-stats { grid-template-columns: 1fr 1fr; } .hero-stats div:nth-child(3) { grid-column: span 2; } }
+
+  /* the badge */
+  .stage { flex: 1 1 21rem; min-width: 0; position: relative; display: flex; flex-direction: column; align-items: center; }
+  .stage .shape { position: absolute; display: block; }
+  .stage .s1 { left: 2%; top: 5.5rem; width: 14.5rem; height: 14.5rem; border-radius: 50%; background: var(--mint); }
+  .stage .s2 { right: 0; bottom: 4rem; width: 10.5rem; height: 10.5rem; border-radius: 28px; background: var(--violet); transform: rotate(14deg); }
+  .stage .s3 { right: 8%; top: 3.5rem; width: 5.2rem; height: 5.2rem; border-radius: 50%; background: var(--coral); }
+  .strap { position: relative; display: block; width: 30px; height: 6rem; background: var(--blue); transform-origin: top; animation: strap .5s ease-out both; }
+  .clip { position: relative; display: block; width: 54px; height: 20px; border-radius: 6px; background: #000; margin-bottom: -8px; z-index: 2; }
+  [data-theme="dark"] .clip { background: #8a8a8a; }
+  @keyframes strap { from { transform: scaleY(0); } }
+  .idwrap { position: relative; perspective: 1000px; animation: drop .9s .25s cubic-bezier(.3, 1.5, .5, 1) both; }
+  @keyframes drop { from { transform: translateY(-70px); opacity: 0; } }
+  .idtilt { transform-style: preserve-3d; transition: transform .15s ease-out; }
+  .idtilt.idle { animation: sway 5s ease-in-out infinite alternate; transition: none; }
+  @keyframes sway { from { transform: rotateY(-18deg) rotateX(4deg); } to { transform: rotateY(18deg) rotateX(-3deg); } }
+  .idflip { all: unset; box-sizing: border-box; display: block; position: relative; width: min(310px, 78vw); cursor: pointer; border-radius: 26px; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.3, 1.2, .4, 1); }
+  .idflip:focus-visible { outline: 3px solid var(--blue); outline-offset: 6px; }
+  .idflip.flipped { transform: rotateY(180deg); }
+  .idface { position: relative; box-sizing: border-box; border-radius: 26px; padding: 22px 24px 24px; background: #000; color: #fff; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.6); backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+  [data-theme="dark"] .idface { background: #161616; box-shadow: 0 0 0 1px #3a3a3a, 0 40px 70px -30px #000; }
+  .idface.front::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at var(--gx, 28%) var(--gy, 18%), rgba(255, 255, 255, 0.2), transparent 46%); pointer-events: none; }
+  .idface.back { position: absolute; inset: 0; transform: rotateY(180deg); justify-content: space-between; }
+  .idface span { display: block; }
+  .idface .bars { display: flex; gap: 6px; }
+  .idface .bars i { flex: 1; height: 10px; border-radius: 5px; background: var(--mint); }
+  .idface .bars i:nth-child(2) { background: var(--cyan); } .idface .bars i:nth-child(3) { background: var(--violet); } .idface .bars i:nth-child(4) { background: var(--coral); } .idface .bars i:nth-child(5) { background: var(--pink); }
+  .idface img { width: 104px; height: 104px; border-radius: 22px; object-fit: cover; border: 3px solid #fff; }
+  .idface .nm { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em; }
+  .idface .rl { font-size: 0.92rem; color: #c4c4c4; }
+  .idface .lang { display: flex; flex-wrap: wrap; gap: 8px; }
+  .idface .lang i { font-style: normal; font-weight: 700; font-size: 0.8rem; padding: 5px 11px; border-radius: 999px; color: #000; }
+  .idface .c1 { background: var(--cyan); } .idface .c2 { background: var(--coral); } .idface .c3 { background: var(--violet); color: #fff !important; }
+  .idface .co { font-weight: 800; font-size: 4.75rem; line-height: 0.9; letter-spacing: -0.05em; margin-top: 10px; }
+  .idface .code { height: 34px; background: repeating-linear-gradient(90deg, #fff 0 2px, transparent 2px 5px, #fff 5px 6px, transparent 6px 11px); }
+  .idface .bk { font-size: 0.92rem; color: #c4c4c4; }
+  .idface .bk b { display: block; font-weight: 800; font-size: 2.3rem; line-height: 1; letter-spacing: -0.03em; color: #fff; }
+  .idface .bk:nth-of-type(2) b { color: var(--mint); } .idface .bk:nth-of-type(3) b { color: var(--cyan); } .idface .bk:nth-of-type(4) b { color: var(--pink); }
+  .sticker { position: absolute; font-weight: 800; font-size: 0.95rem; padding: 0.6rem 1rem; border-radius: 14px; color: #000; z-index: 3; pointer-events: none; }
+  .sticker { transition: opacity .25s; }
+  .stage.flipped .sticker { opacity: 0; }
+  .sticker.a { right: -0.6rem; top: 11.6rem; background: var(--pink); transform: rotate(-10deg); animation: boba 3s ease-in-out infinite alternate; }
+  .sticker.b { right: -1.1rem; bottom: 9.2rem; background: var(--cyan); transform: rotate(9deg); animation: bobb 3.6s ease-in-out infinite alternate; }
+  @keyframes boba { from { transform: translateY(0) rotate(-10deg); } to { transform: translateY(-12px) rotate(-10deg); } }
+  @keyframes bobb { from { transform: translateY(0) rotate(9deg); } to { transform: translateY(-12px) rotate(9deg); } }
+  @media (max-width: 560px) { .sticker.a { right: -0.1rem; } .sticker.b { right: -0.2rem; } }
+  .fliphint { position: relative; margin: 1.6rem 0 0; font-size: 0.85rem; color: var(--muted); background: var(--bg); padding: 0.25rem 0.7rem; border-radius: 999px; }
+  @media (prefers-reduced-motion: reduce) {
+    .idtilt.idle, .sticker.a, .sticker.b, .idwrap, .strap { animation: none; }
+    .idflip { transition: none; }
+  }
 </style>
 </head>
 <body data-view="home">
 <div id="glow" aria-hidden="true"></div>
 
 <div class="road" aria-hidden="true"><svg id="cab" viewBox="0 0 160 64">
-<rect x="66" y="0" width="30" height="10" rx="2" fill="#ffffff"/>
-<path d="M6 46V34q0-7 9-8l22-3 15-13q3-3 8-3h40q5 0 8 3l15 13 22 4q9 1 9 9v10z" fill="#ffd400"/>
-<path d="M48 24l11-10q2-2 5-2h13v12z" fill="#0f1115"/>
-<path d="M82 12h17q3 0 5 2l10 10H82z" fill="#0f1115"/>
-<rect x="6" y="34" width="148" height="5" fill="#0f1115"/>
-<g class="wh"><circle cx="40" cy="48" r="13" fill="#000000"/><circle cx="40" cy="48" r="6" fill="#c4c8d0"/><rect x="39" y="37" width="2" height="22" fill="#c4c8d0"/></g>
-<g class="wh"><circle cx="120" cy="48" r="13" fill="#000000"/><circle cx="120" cy="48" r="6" fill="#c4c8d0"/><rect x="119" y="37" width="2" height="22" fill="#c4c8d0"/></g>
+<path d="M6 46V34q0-7 9-8l22-3 15-13q3-3 8-3h40q5 0 8 3l15 13 22 4q9 1 9 9v10z" fill="#2458e6"/>
+<path d="M48 24l11-10q2-2 5-2h13v12z" fill="#ffffff"/>
+<path d="M82 12h17q3 0 5 2l10 10H82z" fill="#ffffff"/>
+<g class="wh"><circle cx="40" cy="48" r="13" fill="#3a3a3a"/><circle cx="40" cy="48" r="6" fill="#ffffff"/><rect x="39" y="37" width="2" height="22" fill="#ffffff"/></g>
+<g class="wh"><circle cx="120" cy="48" r="13" fill="#3a3a3a"/><circle cx="120" cy="48" r="6" fill="#ffffff"/><rect x="119" y="37" width="2" height="22" fill="#ffffff"/></g>
 </svg></div>
 <div id="app">
 <main id="home-view" class="wrap">
 
-  <div class="hero-x" id="top">
+  <div class="hero-b" id="top">
     <div class="lead">
-      <div class="eta bf" style="--i:0"><img src="img/vaibhav.jpg" alt="Vaibhav Gawad" width="116" height="116"><span>Your backend engineer is <b>on the way</b></span></div>
-      <h1 class="hw"><span style="--w:0">I</span> <span style="--w:1">keep</span> <span style="--w:2">the</span> <span style="--w:3">backend</span> <span style="--w:4">at</span> <span class="u" style="--w:5">Uber</span> <span style="--w:6">moving.</span></h1>
-      <p class="sub bf" style="--i:2">Vaibhav Gawad. Two years building services, APIs and distributed systems in Go, Java and Python.</p>
-      <div class="cta bf" style="--i:3"><a class="btn" href="mailto:gawadvaibhavv@gmail.com">Book me for an interview</a><a class="btn ghost" href="#work">See my route</a></div>
-    </div>
-    <div class="trip bf" style="--i:3">
-      <div class="trip-head"><b>Trip in progress</b><span>2 yrs so far</span></div>
-      <div>
-        <div class="stop" style="--s:0"><div class="rail"><i></i><u></u></div><div><strong>Petwer</strong><small>Web developer intern</small></div><time>2021</time></div>
-        <div class="stop" style="--s:1"><div class="rail"><i></i><u></u></div><div><strong>Microsoft</strong><small>Engage mentee, 1 of ~600 from 25,000+</small></div><time>2022</time></div>
-        <div class="stop" style="--s:2"><div class="rail"><i></i><u style="background:#0f1115"></u></div><div><strong>Barclays</strong><small>Payments infrastructure, DevOps</small></div><time>2023–24</time></div>
-        <div class="stop cur" style="--s:3"><div class="rail"><i></i></div><div><strong>Uber</strong><small>Backend engineer, current stop</small></div><time>Nov 2024 – now</time></div>
-      </div>
-      <div class="trip-stats">
+      <div class="hero-tags bf" style="--i:0"><span class="tag-pill g">Open to interviews</span><span class="tag-pill k">2 years in</span></div>
+      <h1 class="hw"><span style="--w:0">Backend</span> <span style="--w:1">engineer</span> <span style="--w:2">at</span> <span style="--w:3">Uber<i class="dot">.</i></span></h1>
+      <p class="sub bf" style="--i:3">I'm Vaibhav. For two years I've built the services, APIs and distributed systems behind the app, in Go, Java and Python.</p>
+      <div class="cta bf" style="--i:4"><a class="btn" href="mailto:gawadvaibhavv@gmail.com">Book me for an interview</a><a class="btn ghost" href="vaibhavgawad.pdf">Résumé</a></div>
+      <div class="hero-stats bf" style="--i:5">
+        <div><b data-n="2" data-suf=" yrs">2 yrs</b><span>at Uber</span></div>
         <div><b data-n="1271">1,271</b><span>LeetCode solved</span></div>
-        <div><b data-n="1878">1,878</b><span>rating, Knight</span></div>
-        <div><b data-n="5.44" data-suf="%">5.44%</b><span>top, worldwide</span></div>
+        <div><b data-n="5.44" data-pre="Top " data-suf="%">Top 5.44%</b><span>Knight, 1,878</span></div>
       </div>
+    </div>
+    <div class="stage">
+      <span class="shape s1" aria-hidden="true"></span><span class="shape s2" aria-hidden="true"></span><span class="shape s3" aria-hidden="true"></span>
+      <span class="strap" aria-hidden="true"></span><span class="clip" aria-hidden="true"></span>
+      <div class="idwrap"><div class="idtilt idle">
+        <button class="idflip" type="button" aria-pressed="false" aria-label="Staff badge for Vaibhav Gawad, backend engineer at Uber. Press to flip.">
+          <span class="idface front">
+            <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <img src="img/vaibhav.jpg" alt="" width="104" height="104">
+            <span><span class="nm">Vaibhav Gawad</span><span class="rl">Software Engineer, Backend</span></span>
+            <span class="lang"><i class="c1">Go</i><i class="c2">Java</i><i class="c3">Python</i></span>
+            <span class="rl">Since Nov 2024, Bengaluru</span>
+            <span class="co">Uber</span>
+            <span class="code" aria-hidden="true"></span>
+          </span>
+          <span class="idface back">
+            <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="bk"><b>1,271</b>LeetCode problems solved</span>
+            <span class="bk"><b>1,878</b>contest rating, Knight</span>
+            <span class="bk"><b>Top 5.44%</b>of 892,590 contestants</span>
+            <span class="rl">Before Uber: Barclays, Microsoft Engage</span>
+            <span class="nm" style="font-size:1rem">gawadvaibhavv@gmail.com</span>
+          </span>
+        </button>
+      </div></div>
+      <span class="sticker a" aria-hidden="true">1,271 solved</span><span class="sticker b" aria-hidden="true">Knight</span>
+      <p class="fliphint">Tap the badge to flip it</p>
     </div>
   </div>
 
@@ -598,9 +740,9 @@
             <div class="att">122 attempting</div>
           </div>
           <div class="diffs">
-            <div class="diff"><div class="top"><b style="color:#00b8a3">Easy</b><span>466 / 976</span></div><div class="bar"><i data-w="47.7" style="background:#00b8a3"></i></div></div>
-            <div class="diff"><div class="top"><b style="color:#f5a524">Medium</b><span>710 / 2148</span></div><div class="bar"><i data-w="33.1" style="background:#ffc01e"></i></div></div>
-            <div class="diff"><div class="top"><b style="color:#ef4743">Hard</b><span>95 / 991</span></div><div class="bar"><i data-w="9.6" style="background:#ef4743"></i></div></div>
+            <div class="diff"><div class="top"><b class="c-easy">Easy</b><span>466 / 976</span></div><div class="bar"><i data-w="47.7" style="background:#1fbf75"></i></div></div>
+            <div class="diff"><div class="top"><b class="c-med">Medium</b><span>710 / 2148</span></div><div class="bar"><i data-w="33.1" style="background:#3b6cf6"></i></div></div>
+            <div class="diff"><div class="top"><b class="c-hard">Hard</b><span>95 / 991</span></div><div class="bar"><i data-w="9.6" style="background:#ff5a4f"></i></div></div>
           </div>
         </div>
         <div class="box spot badgebox">
@@ -773,7 +915,7 @@ worker-1    <span class="k">██</span>     ██████</pre></div>
 
 <div class="term-modal" id="term-modal" role="dialog" aria-modal="true" aria-label="Terminal">
   <div class="term">
-    <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>vaibhav@uber: ~</span><button id="term-close" aria-label="Close terminal">esc</button></div>
+    <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#22d3ee"></i><i style="background:#28c840"></i><span>vaibhav@uber: ~</span><button id="term-close" aria-label="Close terminal">esc</button></div>
     <div class="term-out" id="term-out"></div>
     <form id="term-form" autocomplete="off"><label for="term-in">$</label><input id="term-in" spellcheck="false" aria-label="Command"></form>
   </div>
@@ -1580,11 +1722,11 @@ var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5
     var chart = document.getElementById('lc-chart');
     chart.insertAdjacentHTML('beforeend',
       '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-label="Contest rating from 1,466 in 2021 to 1,878 in 2024, peak 1,889">' +
-      '<defs><linearGradient id="lcfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b" stop-opacity=".28"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></linearGradient></defs>' +
+      '<defs><linearGradient id="lcfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b6cf6" stop-opacity=".28"/><stop offset="1" stop-color="#3b6cf6" stop-opacity="0"/></linearGradient></defs>' +
       '<path d="' + d + ' L' + X(R.length - 1) + ' ' + H + ' L' + X(0) + ' ' + H + 'Z" fill="url(#lcfill)"/>' +
-      '<path id="lc-line" d="' + d + '" fill="none" stroke="#f59e0b" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
+      '<path id="lc-line" d="' + d + '" fill="none" stroke="#3b6cf6" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
       '<line id="lc-vl" x1="0" x2="0" y1="0" y2="' + H + '" stroke="currentColor" stroke-opacity=".2" vector-effect="non-scaling-stroke" style="display:none"/>' +
-      '<circle id="lc-dot" r="4" fill="#f59e0b" stroke="var(--card)" stroke-width="2" cx="' + X(R.length - 1) + '" cy="' + Y(R[R.length - 1]) + '" vector-effect="non-scaling-stroke"/>' +
+      '<circle id="lc-dot" r="4" fill="#3b6cf6" stroke="var(--card)" stroke-width="2" cx="' + X(R.length - 1) + '" cy="' + Y(R[R.length - 1]) + '" vector-effect="non-scaling-stroke"/>' +
       '</svg><div class="axis"><span>Sep 2021</span><span>Aug 2024</span></div>');
     var svg = chart.querySelector('svg'), tip = document.getElementById('lc-tip'), dot = document.getElementById('lc-dot'), vl = document.getElementById('lc-vl');
     function show(i) {
@@ -1607,7 +1749,7 @@ var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5
 
     // gauge: 270 degree track, three segments sized by each difficulty's share of solved
     var g = document.getElementById('lc-gauge'), r = 44, C = 2 * Math.PI * r, span = 0.75 * C, gap = 6;
-    var parts = [[466, '#00b8a3'], [710, '#ffc01e'], [95, '#ef4743']], tot = 1271;
+    var parts = [[466, '#1fbf75'], [710, '#3b6cf6'], [95, '#ff5a4f']], tot = 1271;
     var html = '<svg viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(135 50 50)">' +
       '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="var(--soft)" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + span + ' ' + C + '"/>';
     var off = 0;
@@ -1678,18 +1820,18 @@ var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5
 
   // trip card numbers count up once the stops have arrived
   if (!reduce) {
-    document.querySelectorAll('.trip-stats b[data-n]').forEach(function (el) {
-      var target = parseFloat(el.dataset.n), dec = el.dataset.n.indexOf('.') > -1 ? 2 : 0, suf = el.dataset.suf || '';
-      el.textContent = (0).toFixed(dec) + suf;
+    document.querySelectorAll('.hero-stats b[data-n]').forEach(function (el) {
+      var target = parseFloat(el.dataset.n), dec = el.dataset.n.indexOf('.') > -1 ? 2 : 0, suf = el.dataset.suf || '', pre = el.dataset.pre || '';
+      el.textContent = pre + (0).toFixed(dec) + suf;
       setTimeout(function () {
         var t0 = null;
         requestAnimationFrame(function step(ts) {
           if (!t0) t0 = ts;
           var p = Math.min(1, (ts - t0) / 1200), v = target * (1 - Math.pow(1 - p, 3));
-          el.textContent = (dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US')) + suf;
+          el.textContent = pre + (dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US')) + suf;
           if (p < 1) requestAnimationFrame(step);
         });
-      }, 1900);
+      }, 700);
     });
   }
   function moveCab() {
@@ -1709,10 +1851,35 @@ var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5
   window.addEventListener('hashchange', function () { setTimeout(moveCab, 50); });
   moveCab();
 
+  // ---- staff badge: tilts with the pointer, flips on tap ----
+  var stage = document.querySelector('.stage'), tilt = document.querySelector('.idtilt'), flipB = document.querySelector('.idflip');
+  if (stage && tilt && flipB) {
+    var isBack = false, idleT = null;
+    flipB.addEventListener('click', function () {
+      isBack = !isBack;
+      flipB.classList.toggle('flipped', isBack);
+      stage.classList.toggle('flipped', isBack);
+      flipB.setAttribute('aria-pressed', isBack ? 'true' : 'false');
+    });
+    if (!reduce && window.matchMedia && matchMedia('(hover: hover)').matches) {
+      stage.addEventListener('pointermove', function (e) {
+        var r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        clearTimeout(idleT);
+        tilt.classList.remove('idle');
+        tilt.style.transform = 'rotateY(' + (x * 40).toFixed(1) + 'deg) rotateX(' + (-y * 26).toFixed(1) + 'deg)';
+        tilt.style.setProperty('--gx', (50 + x * 90).toFixed(0) + '%');
+        tilt.style.setProperty('--gy', (50 + y * 90).toFixed(0) + '%');
+      });
+      stage.addEventListener('pointerleave', function () {
+        idleT = setTimeout(function () { tilt.style.transform = ''; tilt.classList.add('idle'); }, 700);
+      });
+    }
+  }
+
   // ---- theme ----
   function setTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
-    try { localStorage.setItem('vg-theme-d', t); } catch (e) {}
+    try { localStorage.setItem('vg-theme-b', t); } catch (e) {}
   }
   document.getElementById('theme-btn').addEventListener('click', function () {
     setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
