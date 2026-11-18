@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vaibhav Gawad</title>
+<meta name="description" content="Vaibhav Gawad, backend engineer at Uber building scalable systems in Go, Java and Python.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('vg-theme-d'); } catch (e) {}
+    if (!t) t = 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #09090b; --muted: #71717a; --border: #e4e4e7;
+    --card: #ffffff; --soft: #f4f4f5; --soft-2: #fafafa;
+    --accent: #2563eb; --ring: rgba(9, 9, 11, 0.06);
+    --spot: rgba(37, 99, 235, 0.10); --glow: rgba(37, 99, 235, 0.06);
+    --code-bg: #f6f6f7;
+    --sans: "Inter", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  [data-theme="dark"] {
+    --bg: #09090b; --fg: #fafafa; --muted: #a1a1aa; --border: #27272a;
+    --card: #0c0c0f; --soft: #18181b; --soft-2: #111114;
+    --accent: #60a5fa; --ring: rgba(255, 255, 255, 0.04);
+    --spot: rgba(96, 165, 250, 0.14); --glow: rgba(96, 165, 250, 0.07);
+    --code-bg: #111114;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 3.5rem 1.5rem 9rem; }
+  section { margin-top: 3.25rem; scroll-margin-top: 2rem; }
+  h2.sec { font-size: 1.25rem; font-weight: 700; margin: 0 0 1rem; letter-spacing: -0.01em; }
+  .muted { color: var(--muted); }
+  .prose { color: var(--muted); font-size: 0.95rem; }
+  .prose a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border); }
+  .prose a:hover { text-decoration-color: var(--fg); }
+
+  /* cursor glow over the whole page */
+  #glow { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(520px circle at var(--gx, -999px) var(--gy, -999px), var(--glow), transparent 70%); }
+  #app { position: relative; z-index: 1; }
+
+  /* blur-fade entrance, the Magic UI signature */
+  .bf { opacity: 0; transform: translateY(8px); animation: bf .45s ease-out forwards; animation-delay: calc(var(--i, 0) * 45ms); }
+  @keyframes bf { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .bf { animation: none; opacity: 1; filter: none; transform: none; }
+    html { scroll-behavior: auto; }
+    #glow { display: none; }
+  }
+
+  /* hero */
+  .hero { display: flex; gap: 1.5rem; justify-content: space-between; align-items: flex-start; }
+  .hero h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: 1.05; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 0.75rem; }
+  .hero p { font-size: clamp(1rem, 2.4vw, 1.2rem); margin: 0; max-width: 28rem; }
+  .avatar { flex: none; width: 7rem; height: 7rem; border-radius: 50%; border: 1px solid var(--border);
+    display: grid; place-items: center; font-weight: 800; font-size: 2rem; letter-spacing: -0.04em;
+    background: radial-gradient(circle at 30% 25%, #93c5fd, #2563eb 55%, #1e3a8a); color: #fff;
+    box-shadow: 0 0 0 6px var(--ring); }
+  @media (max-width: 560px) { .avatar { width: 4.5rem; height: 4.5rem; font-size: 1.35rem; } .hero h1 { font-size: 1.95rem; } .hero { gap: 1rem; } }
+  .status { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.1rem; font-size: 0.8rem; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px; padding: 0.25rem 0.75rem 0.25rem 0.6rem; }
+  .status i { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
+
+  /* cards with spotlight */
+  .spot { position: relative; isolation: isolate; }
+  .spot::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; opacity: 0; transition: opacity .25s;
+    background: radial-gradient(240px circle at var(--x, 50%) var(--y, 50%), var(--spot), transparent 70%); }
+  .spot:hover::before { opacity: 1; }
+
+  /* work / education */
+  .rows { display: grid; gap: 0.75rem; }
+  .row { border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+  .row > button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; gap: 0.9rem; align-items: center; width: 100%; padding: 0.8rem 0.9rem; border-radius: 12px; }
+  .row > button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .logo { flex: none; width: 2.6rem; height: 2.6rem; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 700; font-size: 0.85rem; color: #fff; border: 1px solid var(--border); }
+  .row .mid { flex: 1; min-width: 0; }
+  .row .t { font-weight: 600; font-size: 0.92rem; display: flex; align-items: center; gap: 0.35rem; }
+  .row .s { font-size: 0.82rem; color: var(--muted); }
+  .row .d { font-size: 0.8rem; color: var(--muted); text-align: right; white-space: nowrap; }
+  .chev { width: 14px; height: 14px; color: var(--muted); transition: transform .2s; opacity: 0; }
+  .row > button:hover .chev, .row.open .chev { opacity: 1; }
+  .row.open .chev { transform: rotate(90deg); }
+  .row .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+  .row.open .more { grid-template-rows: 1fr; }
+  .row .more > div { overflow: hidden; }
+  .row .more ul { margin: 0; padding: 0 1rem 0.9rem 4.6rem; color: var(--muted); font-size: 0.87rem; }
+  .row .more li { margin: 0.2rem 0; }
+  @media (max-width: 560px) {
+    .row > button { flex-wrap: wrap; }
+    .row .d { width: 100%; text-align: left; padding-left: 3.5rem; margin-top: -0.4rem; }
+    .row .more ul { padding-left: 2.2rem; }
+  }
+
+  /* skills */
+  .badges { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .badge { font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.6rem; border-radius: 6px; background: var(--fg); color: var(--bg); }
+  .badge.soft { background: var(--soft); color: var(--fg); border: 1px solid var(--border); }
+
+  /* section intro (projects, hackathons, contact) */
+  .intro { text-align: center; margin-bottom: 2rem; }
+  .pill { display: inline-block; font-size: 0.8rem; font-weight: 500; background: var(--fg); color: var(--bg); padding: 0.2rem 0.75rem; border-radius: 8px; }
+  .intro h3 { font-size: clamp(1.8rem, 5.5vw, 2.6rem); letter-spacing: -0.035em; font-weight: 800; margin: 0.75rem 0 0.5rem; line-height: 1.1; }
+  .intro p { color: var(--muted); max-width: 32rem; margin: 0 auto; font-size: 1rem; }
+
+  /* projects */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--border); border-radius: 14px; background: var(--card); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .25s, transform .25s; }
+  .card:hover { box-shadow: 0 10px 30px -12px rgba(0,0,0,.18); }
+  .art { height: 9.5rem; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: var(--soft-2); }
+  .art pre { margin: 0; position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem; font-family: var(--mono); font-size: 0.68rem; line-height: 1.6; color: var(--fg); white-space: pre; overflow: hidden;
+    background: color-mix(in srgb, var(--card) 85%, transparent); border: 1px solid var(--border); border-radius: 8px; padding: 0.55rem 0.7rem; backdrop-filter: blur(4px); }
+  .art .k { color: var(--accent); }
+  .art .m { color: var(--muted); }
+  .art::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 14px 14px; }
+  .art .blob { position: absolute; width: 11rem; height: 11rem; border-radius: 50%; filter: blur(30px); opacity: .55; top: -3rem; right: -2rem; }
+  .card .body { padding: 0.9rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+  .card h4 { margin: 0; font-size: 1rem; font-weight: 600; }
+  .card time { font-size: 0.75rem; color: var(--muted); }
+  .card p { margin: 0.2rem 0 0.4rem; color: var(--muted); font-size: 0.85rem; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .tag { font-size: 0.68rem; padding: 0.1rem 0.45rem; border-radius: 5px; background: var(--soft); border: 1px solid var(--border); }
+  .links { display: flex; gap: 0.35rem; margin-top: 0.55rem; }
+  .lk { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; background: var(--fg); color: var(--bg); text-decoration: none; }
+  .lk svg { width: 12px; height: 12px; }
+
+  .avatar { object-fit: cover; }
+  .art.shot { height: auto; aspect-ratio: 16 / 9; background: var(--soft); }
+  .art.shot::before { display: none; }
+  .art.shot img { width: 100%; height: 100%; object-fit: cover; object-position: left top; display: block; transition: transform .5s ease; }
+  .card:hover .art.shot img { transform: scale(1.03); }
+  @media (prefers-reduced-motion: reduce) { .card:hover .art.shot img { transform: none; } }
+  .cta { display: flex; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; flex-wrap: wrap; }
+  .btn { font-size: 0.9rem; font-weight: 600; padding: 0.6rem 1.1rem; border-radius: 10px; background: var(--fg); color: var(--bg); text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+  .btn:hover { opacity: .88; }
+
+  /* hackathon timeline */
+  .tl { list-style: none; margin: 0 0 0 0.9rem; padding: 0; border-left: 1px solid var(--border); }
+  .tl li { position: relative; padding: 0 0 1.6rem 2.2rem; }
+  .tl .dot { position: absolute; left: -1.05rem; top: 0; width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 1px solid var(--border); background: var(--card);
+    display: grid; place-items: center; font-size: 0.95rem; }
+  .tl time { font-size: 0.75rem; color: var(--muted); }
+  .tl h4 { margin: 0.1rem 0 0.15rem; font-size: 0.98rem; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
+  .tl .win { font-size: 0.68rem; font-weight: 600; padding: 0.05rem 0.45rem; border-radius: 999px; background: #fef3c7; color: #92400e; }
+  [data-theme="dark"] .tl .win { background: rgba(251,191,36,.15); color: #fcd34d; }
+  .tl p { margin: 0; color: var(--muted); font-size: 0.87rem; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0.9rem; }
+  @media (max-width: 620px) { .stats { grid-template-columns: 1fr; } }
+  .lc { border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; background: var(--card); display: flex; gap: 1.1rem; align-items: center; }
+  .ringwrap { position: relative; width: 6.2rem; height: 6.2rem; flex: none; }
+  .ringwrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ringwrap .bgc { stroke: var(--soft); }
+  .ringwrap .fgc { stroke: url(#lcg); stroke-dasharray: 289; stroke-dashoffset: 289; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1); }
+  .ringwrap.go .fgc { stroke-dashoffset: 0; }
+  .ringwrap b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.03em; }
+  .lc h4 { margin: 0 0 0.2rem; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem; }
+  .lc p { margin: 0 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  .yt { border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; background: var(--card); }
+  .yt strong { display: block; font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+  .yt span { font-size: 0.85rem; color: var(--muted); }
+  .yt p { font-size: 0.83rem; color: var(--muted); margin: 0.6rem 0 0; }
+
+
+  /* leetcode */
+  .lcx { display: grid; gap: 0.9rem; grid-template-columns: minmax(0, 1fr); }
+  .lcx .box, .lc-row > * { min-width: 0; }
+  .lcx .box { border: 1px solid var(--border); border-radius: 14px; background: var(--card); padding: 1.1rem 1.2rem; }
+  .lcx .lab { font-size: 0.75rem; color: var(--muted); }
+  .lcx .val { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+  .lcx .val small { color: var(--muted); font-weight: 500; font-size: 0.8rem; }
+  .contest-top { display: flex; flex-wrap: wrap; gap: 1rem 1.8rem; align-items: flex-end; }
+  .big { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-top: 0.25rem; }
+  .knight { display: flex; align-items: center; gap: 0.5rem; }
+  .knight svg { width: 2.1rem; height: 2.1rem; }
+  .knight .val { color: #3b82f6; }
+  .chart { position: relative; margin-top: 1rem; }
+  .chart svg { width: 100%; height: 150px; display: block; overflow: visible; }
+  .chart .axis { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; }
+  .chart .tip { position: absolute; top: 0; transform: translate(-50%, -110%); font-size: 0.72rem; font-weight: 600; white-space: nowrap;
+    background: var(--fg); color: var(--bg); padding: 0.15rem 0.45rem; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity .12s; }
+  .chart:hover .tip { opacity: 1; }
+  .lc-row { display: grid; grid-template-columns: 1.35fr 1fr; gap: 0.9rem; }
+  .lc-row { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+  @media (max-width: 620px) { .lc-row { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 420px) { .solved { flex-direction: column; align-items: stretch; } .gauge { align-self: center; } .solved .diffs { width: 100%; flex: none; } }
+  .solved { display: flex; gap: 1.1rem; align-items: center; }
+  .gauge { position: relative; width: 8.4rem; height: 8.4rem; flex: none; }
+  .gauge svg { width: 100%; height: 100%; }
+  .gauge .c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .gauge .c b { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .gauge .c b small { font-size: 0.75rem; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .gauge .c .sub { font-size: 0.75rem; font-weight: 600; margin-top: 0.3rem; display: inline-flex; gap: 0.25rem; align-items: center; justify-content: center; }
+  .gauge .c .sub svg { width: 12px; height: 12px; color: #22c55e; }
+  .gauge .att { position: absolute; left: 0; right: 0; bottom: 0.15rem; text-align: center; font-size: 0.68rem; color: var(--muted); }
+  .gauge .arc { transition: stroke-dasharray 1.3s cubic-bezier(.2,.8,.2,1); }
+  .diffs { flex: 1; display: grid; gap: 0.55rem; min-width: 0; }
+  .diff .top { display: flex; justify-content: space-between; font-size: 0.78rem; }
+  .diff .top b { font-weight: 600; }
+  .diff .top span { color: var(--muted); }
+  .bar { height: 6px; border-radius: 99px; background: var(--soft); overflow: hidden; margin-top: 0.25rem; }
+  .bar i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+  .badgebox { display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
+  .badgebox .shields { display: flex; gap: 0.6rem; align-items: center; }
+  .badgebox .shields svg { width: 2.6rem; height: 2.6rem; }
+  .badgebox .shields svg.main { width: 3.6rem; height: 3.6rem; }
+  .heat-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.4rem 1rem; margin-bottom: 0.8rem; }
+  .heat-head .val { font-size: 1rem; }
+  .heat-head .meta { font-size: 0.78rem; color: var(--muted); }
+  .heat-head .meta b { color: var(--fg); font-weight: 600; }
+  .heat-scroll { overflow-x: auto; }
+  .heat-scroll svg { min-width: 540px; width: 100%; display: block; }
+  .heat-scroll text { font-size: 9px; fill: var(--muted); font-family: var(--sans); }
+  .h0 { fill: var(--soft); } .h1 { fill: #9be9a8; } .h2 { fill: #40c463; } .h3 { fill: #30a14e; } .h4 { fill: #216e39; }
+  [data-theme="dark"] .h0 { fill: #1b1b1f; } [data-theme="dark"] .h1 { fill: #0e4429; } [data-theme="dark"] .h2 { fill: #006d32; } [data-theme="dark"] .h3 { fill: #26a641; } [data-theme="dark"] .h4 { fill: #39d353; }
+  .legend { display: flex; align-items: center; gap: 3px; justify-content: flex-end; font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; }
+  .legend svg { width: 10px; height: 10px; }
+
+  /* blog list */
+  .posts { display: grid; gap: 0.15rem; }
+  .post-link { display: block; padding: 0.65rem 0.75rem; margin: 0 -0.75rem; border-radius: 10px; text-decoration: none; }
+  .post-link:hover { background: var(--soft); }
+  .post-link .pt { font-weight: 600; font-size: 0.95rem; }
+  .post-link .pd { font-size: 0.78rem; color: var(--muted); }
+
+  .ptag { display: inline-block; margin-left: 0.5rem; font-size: 0.68rem; padding: 0 0.4rem; border-radius: 5px; background: var(--soft); border: 1px solid var(--border); color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: -0.5rem 0 1.25rem; }
+  .chip { all: unset; cursor: pointer; font-size: 0.8rem; font-weight: 500; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+  .chip span { opacity: .6; margin-left: 0.15rem; }
+  .chip:hover { color: var(--fg); }
+  .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .blog-sub { color: var(--muted); margin: -1rem 0 1.5rem; font-size: 0.95rem; }
+
+  /* contact */
+  .contact .intro p a { color: var(--accent); text-decoration: none; }
+  .contact .intro p a:hover { text-decoration: underline; }
+
+  /* dock */
+  .dock { position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 20;
+    display: flex; align-items: center; gap: 0.15rem; padding: 0.4rem; border-radius: 999px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border); box-shadow: 0 10px 30px -10px rgba(0,0,0,.25); }
+  .dock a, .dock button { all: unset; box-sizing: border-box; cursor: pointer; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: grid; place-items: center; color: var(--fg);
+    transition: transform .18s ease, background-color .18s; position: relative; }
+  .dock a:hover, .dock button:hover { background: var(--soft); transform: translateY(-3px) scale(1.12); }
+  .dock a:focus-visible, .dock button:focus-visible { outline: 2px solid var(--accent); }
+  .dock svg { width: 18px; height: 18px; }
+  .dock .sep { width: 1px; height: 1.6rem; background: var(--border); margin: 0 0.25rem; }
+  .dock [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 0.6rem); left: 50%; transform: translateX(-50%);
+    font-size: 0.72rem; white-space: nowrap; background: var(--fg); color: var(--bg); padding: 0.2rem 0.5rem; border-radius: 6px; }
+  .sun { display: none; } [data-theme="dark"] .sun { display: block; } [data-theme="dark"] .moon { display: none; }
+
+  /* terminal easter egg */
+  .term-modal { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; background: rgba(0,0,0,.45); backdrop-filter: blur(3px); padding: 1rem; }
+  .term-modal.open { display: grid; }
+  .term { width: min(40rem, 100%); background: #0b0d12; color: #e5e7eb; border-radius: 12px; border: 1px solid #262a33; box-shadow: 0 30px 80px -20px rgba(0,0,0,.6); overflow: hidden; font-family: var(--mono); font-size: 0.8rem; }
+  .term-bar { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0.8rem; border-bottom: 1px solid #262a33; color: #8b93a3; font-size: 0.72rem; }
+  .term-bar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .term-bar span { margin-left: 0.5rem; flex: 1; }
+  .term-bar button { all: unset; cursor: pointer; color: #8b93a3; padding: 0 0.3rem; }
+  .term-out { padding: 0.9rem 1rem 0.3rem; max-height: 55vh; overflow-y: auto; white-space: pre-wrap; line-height: 1.7; }
+  .term-out .p { color: #fbbf24; } .term-out .g { color: #4ade80; } .term-out .b { color: #60a5fa; } .term-out .dim { color: #8b93a3; }
+  .term form { display: flex; gap: 0.6rem; padding: 0.3rem 1rem 1rem; }
+  .term form label { color: #fbbf24; }
+  .term input { flex: 1; background: transparent; border: 0; color: inherit; font: inherit; caret-color: #fbbf24; outline: none; }
+  .hint-key { font-family: var(--mono); font-size: 0.7rem; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 0.3rem; }
+
+  /* views */
+  #blog-view, #post-view { display: none; }
+  body[data-view="blog"] #home-view, body[data-view="post"] #home-view { display: none; }
+  body[data-view="blog"] #blog-view { display: block; }
+  body[data-view="post"] #post-view { display: block; }
+  .page-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 1.5rem; }
+  .back { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+  .back:hover { color: var(--fg); }
+
+  /* article */
+  article header { margin: 1.5rem 0 2rem; }
+  article h1 { font-size: clamp(1.7rem, 5vw, 2.2rem); line-height: 1.15; letter-spacing: -0.03em; margin: 0 0 0.6rem; font-weight: 800; }
+  article .meta { font-size: 0.82rem; color: var(--muted); }
+  article .body { font-size: 1rem; line-height: 1.75; }
+  article .body h2 { font-size: 1.2rem; margin: 2.2rem 0 0.5rem; letter-spacing: -0.01em; }
+  article .body p, article .body li { color: color-mix(in srgb, var(--fg) 82%, var(--bg)); }
+  article .body code { font-family: var(--mono); font-size: 0.84em; background: var(--soft); border: 1px solid var(--border); padding: 0.05em 0.3em; border-radius: 5px; }
+  article .body pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1rem; overflow-x: auto; margin: 1.2rem 0 1.4rem; font-size: 0.78rem; line-height: 1.65; }
+  article .body pre code { background: none; border: 0; padding: 0; font-size: inherit; color: var(--fg); }
+  article .body table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 1rem 0 1.4rem; }
+  article .body th, article .body td { text-align: left; padding: 0.5rem 0.6rem 0.5rem 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+  article .body th { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+  article .body blockquote { margin: 1.4rem 0; padding: 0.1rem 0 0.1rem 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
+  .post-foot { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--muted); }
+  .post-foot a { color: var(--accent); }
+
+  /* ===== Direction D: the route ===== */
+  :root {
+    --bg: #f4f4f0; --fg: #0f1115; --muted: #555b66; --border: #d9d9d2; --card: #ffffff; --soft: #ebebe6; --soft-2: #f7f7f4;
+    --accent: #6b5200; --hl: #ffd400; --grid: #e7e7e1; --road: #0f1115; --lane: #5b606b;
+    --spot: rgba(255, 212, 0, 0.22); --glow: rgba(255, 212, 0, 0.10); --code-bg: #f0f0eb;
+    --display: "Sora", "Inter", system-ui, sans-serif;
+  }
+  [data-theme="dark"] {
+    --bg: #0f1115; --fg: #ffffff; --muted: #b3b8c2; --border: #2b2f38; --card: #171a20; --soft: #1b1e25; --soft-2: #14171c;
+    --accent: #ffd400; --grid: #1b1e25; --road: #1b1e25; --lane: #5b606b;
+    --spot: rgba(255, 212, 0, 0.12); --glow: rgba(255, 212, 0, 0.05); --code-bg: #14171c;
+  }
+  body { padding-top: 44px; background-image: linear-gradient(var(--grid) 2px, transparent 2px), linear-gradient(90deg, var(--grid) 2px, transparent 2px); background-size: 120px 120px; }
+  section { scroll-margin-top: 4.5rem; }
+  .wrap { max-width: 46rem; padding-top: 2.5rem; }
+  h2.sec, .intro h3, .page-title, article h1, .big, .yt strong { font-family: var(--display); letter-spacing: -0.03em; }
+  h2.sec { display: flex; align-items: center; gap: 0.6rem; font-size: 1.35rem; }
+  h2.sec::before { content: ""; width: 12px; height: 12px; background: var(--hl); flex: none; }
+  .pill, .btn, .lk { background: var(--hl); color: #0f1115; }
+  .btn.ghost { background: transparent; color: var(--fg); border: 2px solid var(--border); }
+  .chip[aria-pressed="true"] { background: var(--hl); color: #0f1115; border-color: var(--hl); }
+  .row, .card, .lcx .box, .yt { background: var(--card); }
+  .row.now { border: 2px solid var(--hl); }
+  .row.now .d { color: var(--accent); font-weight: 600; }
+  .tl .win { background: var(--hl); color: #0f1115; }
+  [data-theme="dark"] .tl .win { background: var(--hl); color: #0f1115; }
+
+  /* scroll road */
+  .road { position: fixed; top: 0; left: 0; right: 0; height: 44px; background: var(--road); z-index: 30; overflow: hidden; border-bottom: 2px solid #2b2f38; }
+  .road::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; border-top: 3px dashed var(--lane); }
+  .road svg { position: absolute; left: 0; top: 4px; width: 84px; height: 34px; will-change: transform; }
+
+  /* hero */
+  .hero-x { width: min(1180px, calc(100vw - 2.5rem)); margin-left: calc(50% - min(1180px, 100vw - 2.5rem) / 2); display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: center; padding: 1.5rem 0 1rem; }
+  .hero-x .lead { flex: 999 1 30rem; min-width: 0; display: flex; flex-direction: column; gap: 1.2rem; }
+  .eta { display: flex; align-items: center; gap: 0.8rem; color: var(--muted); font-size: 1rem; }
+  .eta img { width: 3.6rem; height: 3.6rem; border-radius: 50%; object-fit: cover; border: 3px solid var(--hl); }
+  .eta b { color: var(--accent); font-weight: 600; }
+  .hero-x h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(2.5rem, 7vw, 5.6rem); line-height: 0.98; letter-spacing: -0.04em; }
+  .hero-x .sub { margin: 0; max-width: 34rem; font-size: clamp(1.05rem, 2.2vw, 1.2rem); line-height: 1.5; color: var(--muted); }
+  .hero-x .cta { justify-content: flex-start; margin-top: 0.2rem; }
+  .hero-x .btn { font-size: 1rem; padding: 0.85rem 1.4rem; border-radius: 12px; }
+  .trip { flex: 1 1 22rem; min-width: 0; background: #ffffff; color: #0f1115; border-radius: 28px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; box-shadow: 0 30px 60px -30px rgba(0,0,0,.55); border: 1px solid #d9d9d2; }
+  .trip-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+  .trip-head b { font-family: var(--display); font-weight: 800; font-size: 1.2rem; }
+  .trip-head span { background: #0f1115; color: #ffd400; font-weight: 600; font-size: 0.8rem; padding: 0.35rem 0.75rem; border-radius: 999px; white-space: nowrap; }
+  .stop { display: grid; grid-template-columns: 20px 1fr auto; gap: 0.85rem; align-items: start; }
+  .stop .rail { display: flex; flex-direction: column; align-items: center; }
+  .stop .rail i { width: 12px; height: 12px; border-radius: 50%; background: #9aa0aa; margin-top: 5px; display: block; }
+  .stop .rail u { width: 2px; height: 2.3rem; background: #d4d7dd; display: block; }
+  .stop strong { display: block; font-size: 1.05rem; font-weight: 600; }
+  .stop small { display: block; font-size: 0.85rem; color: #555b66; }
+  .stop time { font-size: 0.85rem; color: #555b66; white-space: nowrap; }
+  .stop.cur { background: #0f1115; color: #ffffff; border-radius: 16px; padding: 0.85rem 0.9rem 0.85rem 0; align-items: center; }
+  .stop.cur .rail i { width: 14px; height: 14px; border-radius: 0; background: #ffd400; margin: 0 0 0 4px; }
+  .stop.cur strong { font-family: var(--display); font-weight: 800; font-size: 1.6rem; line-height: 1; }
+  .stop.cur small { color: #c4c8d0; margin-top: 0.25rem; }
+  .stop.cur time { color: #ffd400; font-weight: 600; }
+  .trip-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; border-top: 1px solid #d4d7dd; padding-top: 1rem; }
+  .trip-stats b { display: block; font-family: var(--display); font-weight: 800; font-size: 1.45rem; letter-spacing: -0.02em; }
+  .trip-stats span { font-size: 0.8rem; color: #555b66; }
+  @media (max-width: 560px) { .hero-x { gap: 1.75rem; padding-top: 0.5rem; } .trip { padding: 1.15rem; border-radius: 22px; } }
+
+  /* ===== D v2: names instead of badge circles, motion ===== */
+  body { overflow-x: clip; }
+  .logo { font-size: 0; width: 14px; height: 14px; border: 0; border-radius: 50%; background: var(--muted) !important; margin: 0 0.35rem; }
+  .row.now .logo { background: var(--hl) !important; border-radius: 0; }
+  .row .t { font-family: var(--display); font-size: 1.15rem; letter-spacing: -0.02em; }
+  .row.now .t { font-size: 1.5rem; }
+  .row .more ul { padding-left: 3.4rem; }
+  @media (max-width: 560px) { .row .d { padding-left: 2.35rem; } .row .more ul { padding-left: 2.4rem; } }
+
+  /* headline: words rise in, then a yellow line draws under Uber */
+  .hw span { display: inline-block; opacity: 0; transform: translateY(0.5em); animation: rise .55s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--w) * 80ms + 150ms); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .hw .u { position: relative; }
+  .hw .u::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.02em; height: 0.11em; background: var(--hl); transform: scaleX(0); transform-origin: left; animation: draw .5s ease-out 1s forwards; }
+  @keyframes draw { to { transform: scaleX(1); } }
+
+  /* trip card: stops arrive one by one */
+  .trip .stop { opacity: 0; transform: translateX(-10px); animation: arrive .45s ease-out forwards; animation-delay: calc(var(--s) * 260ms + 700ms); }
+  @keyframes arrive { to { opacity: 1; transform: none; } }
+  .trip .stop .rail u { transform: scaleY(0); transform-origin: top; animation: grow .26s linear forwards; animation-delay: calc(var(--s) * 260ms + 900ms); }
+  @keyframes grow { to { transform: scaleY(1); } }
+  .trip .stop.cur { animation-name: arrive, pulse; animation-duration: .45s, 2.4s; animation-delay: calc(var(--s) * 260ms + 700ms), 2.4s; animation-iteration-count: 1, infinite; animation-timing-function: ease-out, ease-in-out; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 212, 0, 0); } 50% { box-shadow: 0 0 0 6px rgba(255, 212, 0, 0.45); } }
+
+  /* ticker */
+  .ticker { width: 100vw; margin: 2.2rem 0 0 calc(50% - 50vw); background: var(--hl); color: #0f1115; overflow: hidden; border-block: 2px solid #0f1115; }
+  .ticker .track { display: flex; width: max-content; animation: tick 32s linear infinite; }
+  .ticker:hover .track { animation-play-state: paused; }
+  .ticker ul { display: flex; list-style: none; margin: 0; padding: 0.7rem 0; }
+  .ticker li { font-family: var(--display); font-weight: 800; font-size: 1.05rem; padding: 0 1.4rem; white-space: nowrap; display: flex; align-items: center; gap: 2.8rem; }
+  .ticker li::after { content: ""; width: 9px; height: 9px; background: #0f1115; display: block; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* route nav (wide screens) */
+  .route { display: none; }
+  @media (min-width: 1500px) {
+    body[data-view="home"] .route { display: flex; flex-direction: column; position: fixed; left: 1.75rem; top: 50%; transform: translateY(-50%); z-index: 15; border-left: 2px solid var(--border); }
+    .route a { position: relative; padding: 0.42rem 0 0.42rem 1.1rem; font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .route a::before { content: ""; position: absolute; left: -6px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); transition: all .2s; box-sizing: border-box; }
+    .route a:hover { color: var(--fg); }
+    .route a.on { color: var(--fg); font-weight: 600; }
+    .route a.on::before { background: var(--hl); border-color: var(--hl); border-radius: 0; transform: scale(1.25); }
+  }
+
+  /* cab wheels roll while it drives */
+  #cab .wh { transform-box: fill-box; transform-origin: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hw span, .trip .stop, .trip .stop .rail u { animation: none; opacity: 1; transform: none; }
+    .hw .u::after { animation: none; transform: none; }
+    .ticker .track { animation: none; }
+  }
+</style>
+</head>
+<body data-view="home">
+<div id="glow" aria-hidden="true"></div>
+
+<div class="road" aria-hidden="true"><svg id="cab" viewBox="0 0 160 64">
+<rect x="66" y="0" width="30" height="10" rx="2" fill="#ffffff"/>
+<path d="M6 46V34q0-7 9-8l22-3 15-13q3-3 8-3h40q5 0 8 3l15 13 22 4q9 1 9 9v10z" fill="#ffd400"/>
+<path d="M48 24l11-10q2-2 5-2h13v12z" fill="#0f1115"/>
+<path d="M82 12h17q3 0 5 2l10 10H82z" fill="#0f1115"/>
+<rect x="6" y="34" width="148" height="5" fill="#0f1115"/>
+<g class="wh"><circle cx="40" cy="48" r="13" fill="#000000"/><circle cx="40" cy="48" r="6" fill="#c4c8d0"/><rect x="39" y="37" width="2" height="22" fill="#c4c8d0"/></g>
+<g class="wh"><circle cx="120" cy="48" r="13" fill="#000000"/><circle cx="120" cy="48" r="6" fill="#c4c8d0"/><rect x="119" y="37" width="2" height="22" fill="#c4c8d0"/></g>
+</svg></div>
+<div id="app">
+<main id="home-view" class="wrap">
+
+  <div class="hero-x" id="top">
+    <div class="lead">
+      <div class="eta bf" style="--i:0"><img src="img/vaibhav.jpg" alt="Vaibhav Gawad" width="116" height="116"><span>Your backend engineer is <b>on the way</b></span></div>
+      <h1 class="hw"><span style="--w:0">I</span> <span style="--w:1">keep</span> <span style="--w:2">the</span> <span style="--w:3">backend</span> <span style="--w:4">at</span> <span class="u" style="--w:5">Uber</span> <span style="--w:6">moving.</span></h1>
+      <p class="sub bf" style="--i:2">Vaibhav Gawad. Two years building services, APIs and distributed systems in Go, Java and Python.</p>
+      <div class="cta bf" style="--i:3"><a class="btn" href="mailto:gawadvaibhavv@gmail.com">Book me for an interview</a><a class="btn ghost" href="#work">See my route</a></div>
+    </div>
+    <div class="trip bf" style="--i:3">
+      <div class="trip-head"><b>Trip in progress</b><span>2 yrs so far</span></div>
+      <div>
+        <div class="stop" style="--s:0"><div class="rail"><i></i><u></u></div><div><strong>Petwer</strong><small>Web developer intern</small></div><time>2021</time></div>
+        <div class="stop" style="--s:1"><div class="rail"><i></i><u></u></div><div><strong>Microsoft</strong><small>Engage mentee, 1 of ~600 from 25,000+</small></div><time>2022</time></div>
+        <div class="stop" style="--s:2"><div class="rail"><i></i><u style="background:#0f1115"></u></div><div><strong>Barclays</strong><small>Payments infrastructure, DevOps</small></div><time>2023–24</time></div>
+        <div class="stop cur" style="--s:3"><div class="rail"><i></i></div><div><strong>Uber</strong><small>Backend engineer, current stop</small></div><time>Nov 2024 – now</time></div>
+      </div>
+      <div class="trip-stats">
+        <div><b data-n="1271">1,271</b><span>LeetCode solved</span></div>
+        <div><b data-n="1878">1,878</b><span>rating, Knight</span></div>
+        <div><b data-n="5.44" data-suf="%">5.44%</b><span>top, worldwide</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker"><div class="track"><ul><li>Backend engineer at Uber</li><li>2 years in production</li><li>Go, Java, Python</li><li>LeetCode Knight, 1,878</li><li>Top 5.44% worldwide</li><li>Ex-Barclays payments</li><li>Microsoft Engage 2022</li><li>Open to interviews</li></ul><ul aria-hidden="true"><li>Backend engineer at Uber</li><li>2 years in production</li><li>Go, Java, Python</li><li>LeetCode Knight, 1,878</li><li>Top 5.44% worldwide</li><li>Ex-Barclays payments</li><li>Microsoft Engage 2022</li><li>Open to interviews</li></ul></div></div>
+
+  <section id="about">
+    <h2 class="sec bf" style="--i:3">About</h2>
+    <div class="prose bf" style="--i:4">
+      <p>I work on backend services, distributed systems and APIs at <a href="https://www.uber.com">Uber</a>. Before that I was on payments infrastructure at <a href="https://www.barclays.in">Barclays</a>, where I led a Java 8 to 17 upgrade and built CI/CD tooling that cut manual work 15–20x.</p>
+      <p>I've solved 1,271 problems on <a href="https://leetcode.com/u/vaibhavgawad/">LeetCode</a> (Knight, top 5.44% in contests), was picked for <a href="#hackathons">Microsoft Engage</a> in 2022, and once ran a YouTube channel that crossed 2.2M views. Lately I'm deep into AI-assisted development with Claude, Cursor and Codex. Press <span class="hint-key">`</span> or tap the terminal icon in the dock for a surprise.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2 class="sec bf" style="--i:5">Work Experience</h2>
+    <div class="rows">
+      <div class="row spot open now bf" style="--i:6">
+        <button aria-expanded="true">
+          <span class="logo" style="background:#000">Ub</span>
+          <span class="mid"><span class="t">Uber <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Software Engineer, Backend</span></span>
+          <span class="d">Nov 2024 – Present</span>
+        </button>
+        <div class="more"><div><ul>
+          <li>Building scalable backend services in Go, Java and Python.</li>
+          <li>Designing reliable services, distributed systems and APIs that run at Uber's scale.</li>
+          <li>Using AI-assisted development to speed up day-to-day engineering.</li>
+        </ul></div></div>
+      </div>
+      <div class="row spot bf" style="--i:7">
+        <button aria-expanded="false">
+          <span class="logo" style="background:#00aeef">Ba</span>
+          <span class="mid"><span class="t">Barclays <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Technology Graduate Developer</span></span>
+          <span class="d">Jul 2024 – Oct 2024</span>
+        </button>
+        <div class="more"><div><ul>
+          <li>Led the File Gateway upgrade from Java 8 to Java 17, fixing library and compatibility breaks.</li>
+          <li>Wrote and optimised JUnit suites to reach 100% code coverage.</li>
+        </ul></div></div>
+      </div>
+      <div class="row spot bf" style="--i:8">
+        <button aria-expanded="false">
+          <span class="logo" style="background:#00395d">Ba</span>
+          <span class="mid"><span class="t">Barclays <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">DevOps Intern</span></span>
+          <span class="d">Jun 2023 – Aug 2023</span>
+        </button>
+        <div class="more"><div><ul>
+          <li>Built 3 CI/CD utilities (Jenkins, Groovy, Shell, OpenShift) for the digital cheque and credit team.</li>
+          <li>Cut repetitive manual effort 15–20x by wiring them into the team's workflow.</li>
+          <li>Presented the Bulk Property Editor utility at the All Heads meeting.</li>
+        </ul></div></div>
+      </div>
+      <div class="row spot bf" style="--i:9">
+        <button aria-expanded="false">
+          <span class="logo" style="background:linear-gradient(135deg,#f25022 0 50%,#7fba00 50%)">Ms</span>
+          <span class="mid"><span class="t">Microsoft <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Engage Mentee</span></span>
+          <span class="d">May 2022 – Jul 2022</span>
+        </button>
+        <div class="more"><div><ul>
+          <li>One of ~500–700 students picked from 25,000–30,000 applicants.</li>
+          <li>Built MovieFlex, an ML movie recommender, with a Microsoft mentor; shortlisted for a Microsoft interview.</li>
+        </ul></div></div>
+      </div>
+      <div class="row spot bf" style="--i:10">
+        <button aria-expanded="false">
+          <span class="logo" style="background:#f97316">Pe</span>
+          <span class="mid"><span class="t">Petwer <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Web Developer Intern</span></span>
+          <span class="d">Nov 2021 – Jan 2022</span>
+        </button>
+        <div class="more"><div><ul>
+          <li>Built a dynamic site on Node.js, Express and MongoDB, and reworked the UI in Figma.</li>
+        </ul></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2 class="sec bf" style="--i:11">Education</h2>
+    <div class="rows">
+      <div class="row spot bf" style="--i:12">
+        <button aria-expanded="false">
+          <span class="logo" style="background:#7c3aed">TS</span>
+          <span class="mid"><span class="t">Thadomal Shahani Engineering College <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">BE, Information Technology</span></span>
+          <span class="d">2021 – 2024</span>
+        </button>
+        <div class="more"><div><ul><li>CGPA 9. Mumbai.</li><li>Spent most weekends at hackathons; see below.</li></ul></div></div>
+      </div>
+      <div class="row spot bf" style="--i:13">
+        <button aria-expanded="false">
+          <span class="logo" style="background:#0891b2">BV</span>
+          <span class="mid"><span class="t">Bhausaheb Vartak Polytechnic <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Diploma, Computer Engineering</span></span>
+          <span class="d">2019 – 2021</span>
+        </button>
+        <div class="more"><div><ul><li>Graduated with 96.46%. Vasai.</li></ul></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2 class="sec bf" style="--i:13">Skills</h2>
+    <div class="badges bf" style="--i:14">
+      <span class="badge">Go</span><span class="badge">Java</span><span class="badge">Python</span><span class="badge">Spring Boot</span>
+      <span class="badge">Distributed Systems</span><span class="badge">System Design</span><span class="badge">REST APIs</span>
+      <span class="badge">Docker</span><span class="badge">Jenkins</span><span class="badge">OpenShift</span><span class="badge">MongoDB</span>
+      <span class="badge">Docker Compose</span><span class="badge">MySQL</span><span class="badge">Node.js</span><span class="badge">Next.js</span><span class="badge">TypeScript</span><span class="badge">React</span><span class="badge">DSA</span>
+    </div>
+  </section>
+
+  <section id="leetcode">
+    <div class="intro">
+      <span class="pill">LeetCode</span>
+      <h3>Knight on LeetCode</h3>
+      <p>1,271 problems solved, 123 contests, and a rating in the top 5.44% worldwide. <a href="https://leetcode.com/u/vaibhavgawad/" style="color:var(--accent);text-decoration:none">See my profile</a></p>
+    </div>
+    <div class="lcx">
+      <div class="box spot">
+        <div class="contest-top">
+          <div><div class="lab">Contest rating</div><div class="big" id="lc-rating">1,878</div></div>
+          <div class="knight"><svg class="" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v14c0 11-8 19-18 22C14 42 6 34 6 23V9z" fill="#10b981"/><path d="M24 7 38 12v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#6ee7b7"/><path d="M17 17l14 14M21 15l12 12M15 21l10 10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></svg><div><div class="lab">Level</div><div class="val">Knight</div></div></div>
+          <div><div class="lab">Global ranking</div><div class="val">47,322 <small>/ 892,590</small></div></div>
+          <div><div class="lab">Attended</div><div class="val">123</div></div>
+          <div><div class="lab">Top</div><div class="val">5.44%</div></div>
+        </div>
+        <div class="chart" id="lc-chart"><div class="tip" id="lc-tip"></div></div>
+      </div>
+
+      <div class="lc-row">
+        <div class="box spot solved">
+          <div class="gauge" id="lc-gauge">
+            <div class="c"><b><span id="lc-solved">1271</span><small>/4115</small></b><div class="sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Solved</div></div>
+            <div class="att">122 attempting</div>
+          </div>
+          <div class="diffs">
+            <div class="diff"><div class="top"><b style="color:#00b8a3">Easy</b><span>466 / 976</span></div><div class="bar"><i data-w="47.7" style="background:#00b8a3"></i></div></div>
+            <div class="diff"><div class="top"><b style="color:#f5a524">Medium</b><span>710 / 2148</span></div><div class="bar"><i data-w="33.1" style="background:#ffc01e"></i></div></div>
+            <div class="diff"><div class="top"><b style="color:#ef4743">Hard</b><span>95 / 991</span></div><div class="bar"><i data-w="9.6" style="background:#ef4743"></i></div></div>
+          </div>
+        </div>
+        <div class="box spot badgebox">
+          <div><div class="lab">Badges</div><div class="big">24</div></div>
+          <div class="shields"><svg class="" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v14c0 11-8 19-18 22C14 42 6 34 6 23V9z" fill="#6366f1"/><path d="M24 7 38 12v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#a5b4fc"/><path d="M17 17l14 14M21 15l12 12M15 21l10 10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></svg><svg class="main" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v14c0 11-8 19-18 22C14 42 6 34 6 23V9z" fill="#10b981"/><path d="M24 7 38 12v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#6ee7b7"/><path d="M17 17l14 14M21 15l12 12M15 21l10 10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></svg><svg class="" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v14c0 11-8 19-18 22C14 42 6 34 6 23V9z" fill="#22c55e"/><path d="M24 7 38 12v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#86efac"/><path d="M17 17l14 14M21 15l12 12M15 21l10 10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></svg></div>
+          <div><div class="lab">Most recent badge</div><div class="val">Knight <small>· global rank 15,777</small></div></div>
+        </div>
+      </div>
+
+      <div class="box spot">
+        <div class="heat-head">
+          <div class="val">1,119 submissions in 2023</div>
+          <div class="meta">Active days <b>322</b> &nbsp; Max streak <b>170</b></div>
+        </div>
+        <div class="heat-scroll" id="lc-heat"></div>
+        <div class="legend">Less <svg><rect class="h0" width="10" height="10" rx="2"/></svg><svg><rect class="h1" width="10" height="10" rx="2"/></svg><svg><rect class="h2" width="10" height="10" rx="2"/></svg><svg><rect class="h3" width="10" height="10" rx="2"/></svg><svg><rect class="h4" width="10" height="10" rx="2"/></svg> More</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="intro bf" style="--i:15">
+      <span class="pill">My Projects</span>
+      <h3>Check out my latest work</h3>
+      <p>15+ projects, from microservices and a headless coupon engine to an ML recommender. Here are the ones I'm proudest of.</p>
+    </div>
+    <div class="grid">
+      <article class="card spot">
+        <div class="art shot"><img src="img/library-microservice.jpg" alt="Library Microservice running on Okteto with books, customers and orders services" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>Library Microservice</h4><time>Aug 2023</time>
+          <p>My first microservices project: separate books, customers and orders services, built with Docker Compose and deployed as a dev environment on Okteto.</p>
+          <div class="tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span><span class="tag">Docker</span><span class="tag">Docker Compose</span></div><div class="links"><a class="lk" href="https://github.com/vaibhav31s/Library-Microservice"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art shot"><img src="img/couponvault.jpg" alt="Coupon Vault landing page" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>Coupon Vault</h4><time>Mar 2023</time>
+          <p>A headless promotion engine any web or mobile app can plug into. Merchants set rules for dynamic and bulk static codes: usage limits, expiry and who is eligible.</p>
+          <div class="tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span><span class="tag">REST</span></div><div class="links"><a class="lk" href="https://devfolio.co/projects/coupon-vault-d62f"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>Devfolio</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art shot"><img src="img/movieflex.jpg" alt="MovieFlex recommendations page" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>MovieFlex</h4><time>Microsoft Engage 2022</time>
+          <p>Movie recommendations using content-based filtering (cosine similarity on vectorised text) plus genre-based filtering, trained on the MovieLens dataset.</p>
+          <div class="tags"><span class="tag">Django</span><span class="tag">scikit-learn</span><span class="tag">Pandas</span><span class="tag">Tailwind</span></div><div class="links"><a class="lk" href="https://movieflexx.azurewebsites.net/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Website</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art shot"><img src="img/passwordmanager.jpg" alt="Secure Password Manager vault page" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>Secure Password Manager</h4><time>2023</time>
+          <p>A Django web app that stores credentials encrypted with AES and includes a random password generator.</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">Django</span><span class="tag">AES</span><span class="tag">HTML/CSS</span></div><div class="links"><a class="lk" href="https://github.com/vaibhav31s/Secure-Password-Manager-Using-Django"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art shot"><img src="img/reflections.jpg" alt="Reflections blog home page" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>Reflections</h4><time>Jan 2023</time>
+          <p>A blogging community with post recommendations. Built in 48 hours at CSI Rubix 2023 and finished in the top 10.</p>
+          <div class="tags"><span class="tag">Next.js</span><span class="tag">Prisma</span><span class="tag">MongoDB</span><span class="tag">Tailwind</span></div><div class="links"><a class="lk" href="https://reflections-blog.vercel.app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Website</a><a class="lk" href="https://github.com/OmkarBhostekar/CsiHackathonTeam5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art shot"><img src="img/quickchecktech.jpg" alt="QuickCheck Tech landing page" loading="lazy" width="1200" height="675"></div>
+        <div class="body">
+          <h4>QuickCheck Tech</h4><time>Mar 2023</time>
+          <p>Cloud attendance management with face recognition and an IoT check-in device, so classrooms and offices can drop paper registers.</p>
+          <div class="tags"><span class="tag">IoT</span><span class="tag">Next.js</span><span class="tag">Prisma</span><span class="tag">MongoDB</span></div><div class="links"><a class="lk" href="https://quickchecktech.vercel.app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Website</a></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art"><span class="blob" style="background:#38bdf8"></span><pre><span class="m">CONTAINER</span>   <span class="m">CPU</span>    <span class="m">MEM</span>
+api-gw      <span class="k">█████</span>  ███
+worker-1    <span class="k">██</span>     ██████</pre></div>
+        <div class="body">
+          <h4>DockMonitor</h4><time>Feb 2024</time>
+          <p>Live CPU and memory stats for running Docker containers, pulled from the Docker API and refreshed every few seconds.</p>
+          <div class="tags"><span class="tag">Node.js</span><span class="tag">Docker API</span><span class="tag">HTML/CSS</span></div>
+        </div>
+      </article>
+      <article class="card spot">
+        <div class="art"><span class="blob" style="background:#34d399"></span><pre><span class="m">gesture</span>  <span class="k">blink ×2</span>  → open job
+<span class="m">gesture</span>  <span class="k">swipe →</span>   → next match
+<span class="m">match</span>    skills ∩ role</pre></div>
+        <div class="body">
+          <h4>ReservedIn</h4><time>Jan 2024</time>
+          <p>A job portal for differently-abled people with skill matching, an accessible interface, eye and hand gesture controls, and guidance on legal rights.</p>
+          <div class="tags"><span class="tag">React</span><span class="tag">Python</span><span class="tag">Accessibility</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="hackathons">
+    <div class="intro bf" style="--i:16">
+      <span class="pill">Hackathons</span>
+      <h3>I like building things</h3>
+      <p>10+ hackathons in college, mostly with the same group of friends. Some of them placed.</p>
+    </div>
+    <ul class="tl">
+      <li><span class="dot">⛓️</span><time>Sep 2022</time><h4>DigiSuite <span class="win">2nd of 55 teams</span></h4><p>A blockchain document suite storing files on IPFS through web3.storage. Built the frontend and the storage integration.</p></li>
+      <li><span class="dot">📝</span><time>Jan 2023</time><h4>Reflections <span class="win">Top 10 · CSI Rubix</span></h4><p>A blog recommender built in 48 hours. <a href="https://reflections-blog.vercel.app/" style="color:var(--accent)">Website</a></p></li>
+      <li><span class="dot">🛒</span><time>Jul 2022</time><h4>Ecommerce Recommender <span class="win">Top 10</span></h4><p>Product recommendations; owned the React frontend.</p></li>
+      <li><span class="dot">💪</span><time>DataHack 3</time><h4>RepTrackr</h4><p>A fitness tracker that rewards workout goals with subscription plans. <a href="https://datahack-3-code-samiti.vercel.app/" style="color:var(--accent)">Website</a></p></li>
+      <li><span class="dot">🏛️</span><time>Jan 2024</time><h4>Kartavya Path</h4><p>Helps companies find CSR causes by region under India's 2% CSR rule.</p></li>
+      <li><span class="dot">🎁</span><time>Oct 2023</time><h4>WorkWell</h4><p>Employee feedback surveys with rewards for strong performance. <a href="https://storm-tech-heads.vercel.app/" style="color:var(--accent)">Website</a></p></li>
+      <li><span class="dot">🔁</span><time>Feb 2023</time><h4>Bartner</h4><p>An online barter marketplace that takes money out of the trade. <a href="https://devfolio.co/projects/bartner-9bf7" style="color:var(--accent)">Devfolio</a></p></li>
+    </ul>
+  </section>
+
+
+  <section id="stats">
+    <h2 class="sec bf">Off the clock</h2>
+    <div class="yt spot">
+      <strong>2.2M</strong><span>views across 54 YouTube videos</span>
+      <p>Started with gaming fixes in 2016, then switched to explaining LeetCode solutions. 7.8k subscribers before the channel closed.</p>
+    </div>
+  </section>
+
+  <section id="writing">
+    <h2 class="sec bf">Latest writing</h2>
+    <div class="posts" id="home-posts"></div>
+    <p style="margin:0.8rem 0 0"><a href="#blog" style="font-size:0.88rem;color:var(--accent);text-decoration:none">All posts</a></p>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="intro">
+      <span class="pill">Contact</span>
+      <h3>Get in touch</h3>
+      <p>Want to chat about backend engineering, system design or an opportunity? Email me at <a href="mailto:gawadvaibhavv@gmail.com">gawadvaibhavv@gmail.com</a> or message me on <a href="https://www.linkedin.com/in/vaibhav-gawad/">LinkedIn</a>. My code is on <a href="https://github.com/vaibhav31s">GitHub</a> and hackathon work on <a href="https://devfolio.co/@vaibhav31s">Devfolio</a>.</p>
+      <div class="cta"><a class="btn" href="mailto:gawadvaibhavv@gmail.com">Email me</a><a class="btn ghost" href="https://vaibhavgawad.vercel.app/vaibhavgawad.pdf">Résumé (PDF)</a></div>
+    </div>
+  </section>
+</main>
+
+<main id="blog-view" class="wrap">
+  <h1 class="page-title">blog</h1>
+  <p class="blog-sub">Notes on backend engineering, distributed systems, Go, Java and interviews.</p>
+  <div class="chips" id="blog-chips" role="group" aria-label="Filter posts by topic"></div>
+  <div class="posts" id="all-posts"></div>
+</main>
+
+<main id="post-view" class="wrap">
+  <a class="back" href="#blog">← Back to blog</a>
+  <div id="post-slot"></div>
+  <p class="post-foot">Thanks for reading. Questions or corrections are welcome on <a href="https://www.linkedin.com/in/vaibhav-gawad/">LinkedIn</a>.</p>
+</main>
+</div>
+
+<nav class="route" aria-label="Sections">
+  <a href="#about">About</a><a href="#work">Work</a><a href="#leetcode">LeetCode</a><a href="#projects">Projects</a><a href="#hackathons">Hackathons</a><a href="#writing">Writing</a><a href="#contact">Contact</a>
+</nav>
+<nav class="dock" aria-label="Quick links">
+  <a href="#home" data-tip="Home" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a>
+  <a href="#blog" data-tip="Blog" aria-label="Blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></a>
+  <span class="sep"></span>
+  <a href="https://www.linkedin.com/in/vaibhav-gawad/" data-tip="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+  <a href="https://github.com/vaibhav31s" data-tip="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+  <a href="mailto:gawadvaibhavv@gmail.com" data-tip="Email" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+  <a href="https://leetcode.com/u/vaibhavgawad/" data-tip="LeetCode" aria-label="LeetCode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6-6 6 6 6"/><path d="m15 6 6 6-6 6"/><path d="M13 4 11 20"/></svg></a>
+  <span class="sep"></span>
+  <button id="term-btn" data-tip="Terminal ( ` )" aria-label="Open terminal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 4 4-4 4"/><path d="M12 17h7"/></svg></button>
+  <button id="theme-btn" data-tip="Theme" aria-label="Toggle dark mode"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+</nav>
+
+<div class="term-modal" id="term-modal" role="dialog" aria-modal="true" aria-label="Terminal">
+  <div class="term">
+    <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>vaibhav@uber: ~</span><button id="term-close" aria-label="Close terminal">esc</button></div>
+    <div class="term-out" id="term-out"></div>
+    <form id="term-form" autocomplete="off"><label for="term-in">$</label><input id="term-in" spellcheck="false" aria-label="Command"></form>
+  </div>
+</div>
+
+<!-- ============ POSTS ============ -->
+
+<template id="tpl-rate-limiting-in-go">
+<article>
+<header>
+  <h1>Rate limiting in Go: token bucket vs sliding window</h1>
+  <div class="meta">Nov 2026, 8 min read</div>
+</header>
+<div class="body">
+<p>Every public API eventually meets a client that sends far more requests than it should. Sometimes it's a bug in a retry loop, sometimes a scraper, sometimes a perfectly legitimate customer having a big day. A rate limiter decides which of those requests you serve and which get a <code>429 Too Many Requests</code>, so one noisy caller can't take the service down for everyone else.</p>
+<p>There are four classic algorithms: fixed window, sliding log, sliding window counter and token bucket. In practice two of them cover almost everything, so this post builds both in Go and then looks at what changes when you run more than one server.</p>
+
+<h2>Token bucket: allow bursts, cap the average</h2>
+<p>Picture a bucket that holds up to <code>capacity</code> tokens and refills at <code>rate</code> tokens per second. Each request takes one token. If the bucket is empty, the request is rejected. A client that has been quiet can burst up to the bucket's capacity, but over time it can't exceed the refill rate.</p>
+<p>You don't need a background goroutine to refill. Store the time of the last update and add the tokens that would have accumulated since then whenever a request arrives:</p>
+<pre><code data-src="c-tb"></code></pre>
+<p>This is the same idea behind <code>golang.org/x/time/rate</code>. In real code, use that package: <code>rate.NewLimiter(rate.Limit(10), 20)</code> gives you 10 requests per second with bursts of 20, plus <code>Wait</code> and <code>Reserve</code> for callers that would rather queue than fail.</p>
+
+<h2>Sliding window counter: a smoother hard limit</h2>
+<p>A fixed window ("100 requests per minute, reset at :00") is simple, but it lets a client send 100 requests at 12:00:59 and another 100 at 12:01:00: 200 in two seconds. A sliding log fixes that by storing every timestamp, which costs memory per request.</p>
+<p>The sliding window counter is the compromise. Keep counts for the current and previous fixed windows, and estimate the rolling count by weighting the previous window by how much of it still overlaps:</p>
+<pre><code data-src="c-sw"></code></pre>
+<p>It's an approximation because it assumes the previous window's requests were evenly spread, but it uses two integers per client and the error is small in practice.</p>
+
+<h2>Wiring it into an HTTP server</h2>
+<p>You almost always want a limiter per client (per API key, user or IP), not one global limiter. A minimal middleware:</p>
+<pre><code data-src="c-mw"></code></pre>
+<p>Two things to fix before production. First, the map grows forever, so evict idle clients (a TTL cache or a periodic sweep works). Second, behind a load balancer <code>RemoteAddr</code> is the balancer, not the client. Key on the API key or a trusted forwarded header instead.</p>
+
+<h2>When you have more than one server</h2>
+<p>In-memory limiters are per instance. With 10 instances behind a round-robin balancer, a "100 per minute" limit quietly becomes about 1,000. The usual options:</p>
+<ul>
+  <li><strong>Divide the limit by instance count.</strong> Crude, but it needs no shared state, and it is often good enough for protecting your own service.</li>
+  <li><strong>Shared counter in Redis.</strong> For a fixed window, <code>INCR</code> a key like <code>rl:{client}:{minute}</code> and set an expiry. Do both atomically (a Lua script or <code>MULTI</code>), otherwise a crash between the two leaves a key that never expires.</li>
+  <li><strong>Sticky routing.</strong> Hash clients to instances so each client's limiter lives in one place. Cheap, but rebalancing resets limits.</li>
+</ul>
+
+<h2>Which one to pick</h2>
+<table>
+  <tr><th>If you need</th><th>Use</th></tr>
+  <tr><td>Bursty traffic with a capped average, like most APIs</td><td>Token bucket</td></tr>
+  <tr><td>A strict "N per window" quota that's easy to explain to customers</td><td>Sliding window counter</td></tr>
+  <tr><td>Exact counts and low volume</td><td>Sliding log</td></tr>
+</table>
+<p>Whichever you pick, send a <code>Retry-After</code> header with the 429. Well-behaved clients will back off, and the badly behaved ones were going to hit the limit anyway.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-tb">type TokenBucket struct {
+    mu       sync.Mutex
+    capacity float64
+    tokens   float64
+    rate     float64 // tokens added per second
+    last     time.Time
+}
+
+func NewTokenBucket(capacity, rate float64) *TokenBucket {
+    return &TokenBucket{capacity: capacity, tokens: capacity, rate: rate, last: time.Now()}
+}
+
+func (b *TokenBucket) Allow() bool {
+    b.mu.Lock()
+    defer b.mu.Unlock()
+
+    now := time.Now()
+    elapsed := now.Sub(b.last).Seconds()
+    b.tokens = math.Min(b.capacity, b.tokens+elapsed*b.rate)
+    b.last = now
+
+    if b.tokens >= 1 {
+        b.tokens--
+        return true
+    }
+    return false
+}</script>
+
+<script type="text/plain" id="c-sw">type SlidingWindow struct {
+    mu         sync.Mutex
+    limit      int
+    window     time.Duration
+    currStart  time.Time
+    curr, prev int
+}
+
+func (s *SlidingWindow) Allow() bool {
+    s.mu.Lock()
+    defer s.mu.Unlock()
+
+    now := time.Now()
+    if elapsed := now.Sub(s.currStart); elapsed >= s.window {
+        if elapsed >= 2*s.window {
+            s.prev = 0 // the previous window was empty
+        } else {
+            s.prev = s.curr
+        }
+        s.curr = 0
+        s.currStart = now.Truncate(s.window)
+    }
+
+    // fraction of the previous window that still overlaps the rolling window
+    weight := 1 - float64(now.Sub(s.currStart))/float64(s.window)
+    estimate := float64(s.prev)*weight + float64(s.curr)
+    if estimate >= float64(s.limit) {
+        return false
+    }
+    s.curr++
+    return true
+}</script>
+
+<script type="text/plain" id="c-mw">func RateLimit(next http.Handler, newLimiter func() *TokenBucket) http.Handler {
+    var mu sync.Mutex
+    limiters := map[string]*TokenBucket{}
+
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+
+        mu.Lock()
+        lim, ok := limiters[ip]
+        if !ok {
+            lim = newLimiter()
+            limiters[ip] = lim
+        }
+        mu.Unlock()
+
+        if !lim.Allow() {
+            w.Header().Set("Retry-After", "1")
+            http.Error(w, "too many requests", http.StatusTooManyRequests)
+            return
+        }
+        next.ServeHTTP(w, r)
+    })
+}</script>
+
+<template id="tpl-idempotency-keys">
+<article>
+<header>
+  <h1>Idempotency keys: how APIs avoid charging you twice</h1>
+  <div class="meta">Nov 2026, 7 min read</div>
+</header>
+<div class="body">
+<p>A client sends <code>POST /payments</code>. The server charges the card, writes to the database and starts sending the response, and then the connection drops. The client never sees a reply. Did the payment go through?</p>
+<p>The client can't know. If it retries, it might charge the customer twice. If it doesn't, the order might never be paid. Networks fail like this all the time, so any API that moves money, books seats or sends messages needs an answer. The standard one is the <strong>idempotency key</strong>.</p>
+
+<h2>The idea</h2>
+<p>An operation is idempotent if doing it twice has the same effect as doing it once. <code>GET</code>, <code>PUT</code> and <code>DELETE</code> are meant to be idempotent; <code>POST</code> usually isn't. Idempotency keys make a <code>POST</code> behave idempotently:</p>
+<ol>
+  <li>The client generates a unique key (a UUID) for each logical operation and sends it in a header, such as <code>Idempotency-Key: 6f1c…</code>.</li>
+  <li>On retries of the same operation, the client sends the <em>same</em> key.</li>
+  <li>The server remembers each key it has seen. A repeat key gets back the original result instead of running the operation again.</li>
+</ol>
+<p>Stripe popularised this pattern, and there's now an IETF draft standardising the <code>Idempotency-Key</code> header.</p>
+
+<h2>The storage</h2>
+<p>All you need is a table with a unique constraint on the key:</p>
+<pre><code data-src="c-sql"></code></pre>
+<p>Storing a hash of the request body lets you catch a client that reuses a key for a different request, which is always a bug on their side.</p>
+
+<h2>The flow</h2>
+<p>The trick is to claim the key <em>before</em> doing any work, using the database's unique constraint as the lock:</p>
+<pre><code data-src="c-flow"></code></pre>
+<p>Each branch maps to a clear outcome:</p>
+<table>
+  <tr><th>Situation</th><th>Response</th></tr>
+  <tr><td>New key</td><td>Run the operation, store and return the result</td></tr>
+  <tr><td>Same key, same body, finished</td><td>Return the stored response, no new work</td></tr>
+  <tr><td>Same key, same body, still running</td><td><code>409 Conflict</code>: tell the client to retry shortly</td></tr>
+  <tr><td>Same key, different body</td><td><code>422</code>: the client reused a key by mistake</td></tr>
+</table>
+
+<h2>The parts that bite</h2>
+<p><strong>Crashes mid-operation.</strong> If the server dies after claiming the key but before finishing, the row stays <code>in_progress</code> forever. Add a <code>locked_at</code> timestamp and let a later request take over a key that has been stuck longer than your timeout.</p>
+<p><strong>Side effects outside your database.</strong> If the operation calls a payment processor, your table alone can't make that call idempotent. Pass an idempotency key downstream too, so the processor dedupes on its side. Idempotency has to hold at every hop, not just the first.</p>
+<p><strong>Which responses to store.</strong> Store successes and client errors (4xx), because retrying them gives the same answer. Don't permanently store 5xx results caused by transient failures, or a temporary outage turns into a permanent failure for that key.</p>
+<p><strong>Expiry.</strong> Keys don't need to live forever, just longer than any reasonable retry window. A day is a common choice. Clean old rows up with a scheduled job.</p>
+
+<h2>The takeaway</h2>
+<p>Retries are not optional in distributed systems. Timeouts, dropped connections and redeploys guarantee that some requests will be sent twice. Idempotency keys turn "did that go through?" from a support ticket into a non-event, and they cost one table and about fifty lines of code.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-sql">CREATE TABLE idempotency_keys (
+    key          TEXT PRIMARY KEY,
+    request_hash TEXT        NOT NULL,
+    status       TEXT        NOT NULL,  -- 'in_progress' or 'done'
+    response     JSONB,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);</script>
+
+<script type="text/plain" id="c-flow">func (s *Server) handlePayment(w http.ResponseWriter, r *http.Request) {
+    key := r.Header.Get("Idempotency-Key")
+    body, _ := io.ReadAll(r.Body)
+    hash := sha256Hex(body)
+
+    // 1. Try to claim the key. Only one request can win this insert.
+    res, err := s.db.Exec(`
+        INSERT INTO idempotency_keys (key, request_hash, status)
+        VALUES ($1, $2, 'in_progress')
+        ON CONFLICT (key) DO NOTHING`, key, hash)
+    if err != nil {
+        http.Error(w, "storage error", http.StatusInternalServerError)
+        return
+    }
+
+    if n, _ := res.RowsAffected(); n == 0 {
+        // 2. Someone has used this key before. Find out what happened.
+        var storedHash, status string
+        var response []byte
+        s.db.QueryRow(`SELECT request_hash, status, response
+                       FROM idempotency_keys WHERE key = $1`, key).
+            Scan(&storedHash, &status, &response)
+
+        switch {
+        case storedHash != hash:
+            http.Error(w, "key reused with a different request", http.StatusUnprocessableEntity)
+        case status == "in_progress":
+            http.Error(w, "request still processing", http.StatusConflict)
+        default:
+            w.Write(response) // replay the original result
+        }
+        return
+    }
+
+    // 3. We own the key: do the work exactly once.
+    result := s.chargeCard(r.Context(), body, key)
+
+    s.db.Exec(`UPDATE idempotency_keys SET status = 'done', response = $2
+               WHERE key = $1`, key, result)
+    w.Write(result)
+}</script>
+
+<template id="tpl-leetcode-patterns">
+<article>
+<header>
+  <h1>The handful of patterns behind most LeetCode problems</h1>
+  <div class="meta">Nov 2026, 6 min read</div>
+</header>
+<div class="body">
+<p>After 1,000+ problems, the biggest change isn't that I know more algorithms. It's that I read the problem statement differently. Most problems announce their pattern in the first two sentences if you know what to listen for. This post is that list of signals.</p>
+
+<h2>Read the signal, pick the pattern</h2>
+<table>
+  <tr><th>The problem says</th><th>Reach for</th></tr>
+  <tr><td>Sorted array, find a pair or triplet</td><td>Two pointers</td></tr>
+  <tr><td>Longest or shortest contiguous subarray or substring that satisfies X</td><td>Sliding window</td></tr>
+  <tr><td>Count subarrays whose sum equals k</td><td>Prefix sums and a hash map</td></tr>
+  <tr><td>"Minimum possible maximum", or "smallest X such that it's possible"</td><td>Binary search on the answer</td></tr>
+  <tr><td>Next greater or smaller element</td><td>Monotonic stack</td></tr>
+  <tr><td>Top k, kth largest, merge k sorted lists</td><td>Heap</td></tr>
+  <tr><td>Shortest path, unweighted</td><td>BFS (Dijkstra if weights are non-negative)</td></tr>
+  <tr><td>Groups, connected components, "are these linked?"</td><td>Union-find or DFS</td></tr>
+  <tr><td>Tasks with prerequisites</td><td>Topological sort</td></tr>
+  <tr><td>All combinations, permutations or subsets</td><td>Backtracking</td></tr>
+  <tr><td>Count the ways, or min/max cost, with choices at each step</td><td>Dynamic programming</td></tr>
+  <tr><td>Overlapping intervals</td><td>Sort by start, then sweep</td></tr>
+</table>
+<p>The table won't solve the problem for you, but it turns a blank page into a short list of things to try.</p>
+
+<h2>Sliding window, the template</h2>
+<p>Grow the window on the right, and shrink it from the left when it breaks the rule. Every index enters and leaves once, so it's O(n). Here it is on "longest substring without repeating characters":</p>
+<pre><code data-src="c-swin"></code></pre>
+
+<h2>Binary search on the answer</h2>
+<p>This is the most underrated pattern. If you can check "is answer X good enough?" quickly, and the answer is monotonic (if X works, X+1 also works), you can binary search over the answers instead of the input. Koko eating bananas is the classic example:</p>
+<pre><code data-src="c-bs"></code></pre>
+<p>Once you see it, it shows up everywhere: shipping packages within D days, splitting an array to minimise the largest sum, placing routers as far apart as possible.</p>
+
+<h2>How I'd practise if I started again</h2>
+<ul>
+  <li><strong>Go by pattern, not at random.</strong> Do 5–8 problems of one pattern in a row until the template is automatic, then mix.</li>
+  <li><strong>Say the signal out loud first.</strong> Before coding, name the pattern and why. In interviews this is half the signal anyway.</li>
+  <li><strong>Re-solve, don't re-read.</strong> A problem you looked up the answer to isn't solved. Come back in a week and do it cold.</li>
+  <li><strong>Time-box.</strong> If you're stuck after 25–30 minutes, read the approach (not the code), then write it yourself.</li>
+</ul>
+<blockquote>Patterns get you to a working solution. Talking clearly about trade-offs is what turns that into a strong interview.</blockquote>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-swin">func lengthOfLongestSubstring(s string) int {
+    last := map[byte]int{} // char -> last index seen
+    best, left := 0, 0
+
+    for right := 0; right < len(s); right++ {
+        if i, ok := last[s[right]]; ok && i >= left {
+            left = i + 1 // shrink past the duplicate
+        }
+        last[s[right]] = right
+        if right-left+1 > best {
+            best = right - left + 1
+        }
+    }
+    return best
+}</script>
+
+<script type="text/plain" id="c-bs">func minEatingSpeed(piles []int, h int) int {
+    lo, hi := 1, 0
+    for _, p := range piles {
+        if p > hi {
+            hi = p
+        }
+    }
+
+    for lo < hi {
+        mid := lo + (hi-lo)/2
+        hours := 0
+        for _, p := range piles {
+            hours += (p + mid - 1) / mid // ceil(p / mid)
+        }
+        if hours <= h {
+            hi = mid // mid works, try slower
+        } else {
+            lo = mid + 1
+        }
+    }
+    return lo
+}</script>
+
+
+<!-- ============ MORE POSTS ============ -->
+
+<template id="tpl-consistent-hashing">
+<article>
+<header>
+  <h1>Consistent hashing, explained with 100,000 keys</h1>
+  <div class="meta">Nov 2026, 7 min read</div>
+</header>
+<div class="body">
+<p>Say you run four cache servers and decide which one holds a key with <code>hash(key) % 4</code>. It works perfectly until traffic grows and you add a fifth server. Now every key is routed with <code>% 5</code>, and most of them land somewhere new. Your cache hit rate falls off a cliff and the database behind it takes the full load at the worst possible moment.</p>
+<p>Consistent hashing is the fix, and it's one of those ideas that shows up everywhere once you know it: cache clients, Cassandra's token ring, load balancers like Envoy's ring hash, and sharded databases.</p>
+
+<h2>Measuring the problem</h2>
+<p>I hashed 100,000 keys (<code>user:0</code> to <code>user:99999</code>) with CRC32 and counted how many changed server when going from 4 servers to 5:</p>
+<table>
+  <tr><th>Strategy</th><th>Keys that moved</th></tr>
+  <tr><td><code>hash % N</code></td><td>80.0%</td></tr>
+  <tr><td>Consistent hashing, 1 point per server</td><td>98.0%</td></tr>
+  <tr><td>Consistent hashing, 150 virtual nodes per server</td><td>21.5%</td></tr>
+</table>
+<p>The ideal is 20%: the new server should take its fair fifth and nothing else should move. The middle row is the interesting one, and we'll come back to it.</p>
+
+<h2>The ring</h2>
+<p>Imagine the hash space (0 to 2<sup>32</sup>−1) bent into a circle. Hash each server onto the circle. To find a key's server, hash the key and walk clockwise until you hit a server.</p>
+<p>When you add a server, it lands at one spot on the ring and takes over only the keys between it and the previous server. Everything else stays put. Removing a server is the mirror image: its keys move to the next server clockwise.</p>
+
+<h2>Virtual nodes fix the balance</h2>
+<p>With one point per server, the arcs between servers are random lengths, so some servers own huge slices of the ring and others almost nothing. In my test, with short, similar server names, one server ended up owning about 98% of the keys. That's also why the 1-point version moved almost everything: the new server happened to land in the giant arc.</p>
+<p>The fix is to put each server on the ring many times, as <code>cache-0#0</code>, <code>cache-0#1</code> and so on. With 150 virtual nodes per server, each of the 5 servers held between 18.9% and 21.5% of the keys. More points means smoother balance, at the cost of a bigger sorted array.</p>
+
+<h2>The code</h2>
+<p>A complete ring in Go is about 30 lines. Lookups are a binary search over the sorted virtual node hashes:</p>
+<pre><code data-src="c-ring"></code></pre>
+<p>Usage is what you'd expect:</p>
+<pre><code data-src="c-ring-use"></code></pre>
+
+<h2>Things worth knowing</h2>
+<ul>
+  <li><strong>Weights are free.</strong> Give a bigger machine more virtual nodes and it gets proportionally more keys.</li>
+  <li><strong>Replication follows the ring.</strong> To keep 3 copies, walk clockwise and take the next 3 <em>distinct</em> servers. This is the core of Dynamo-style databases.</li>
+  <li><strong>There are alternatives.</strong> Rendezvous (highest random weight) hashing needs no ring at all: score every server against the key and pick the highest. Jump consistent hash, from Google, needs no memory but only works when servers are numbered and removed from the end.</li>
+  <li><strong>Hot keys still exist.</strong> Consistent hashing balances <em>keys</em>, not <em>traffic</em>. One celebrity's profile can still melt one server. That needs replication or a local cache in front.</li>
+</ul>
+<p>The takeaway: if you shard anything by key and the number of shards can change, don't use <code>% N</code>. Use a ring with virtual nodes, or a library that does.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-ring">type Ring struct {
+    replicas int
+    hashes   []uint32          // sorted virtual node hashes
+    owners   map[uint32]string // virtual node hash -> server
+}
+
+func NewRing(replicas int) *Ring {
+    return &Ring{replicas: replicas, owners: map[uint32]string{}}
+}
+
+func (r *Ring) Add(server string) {
+    for i := 0; i < r.replicas; i++ {
+        h := crc32.ChecksumIEEE([]byte(server + "#" + strconv.Itoa(i)))
+        r.hashes = append(r.hashes, h)
+        r.owners[h] = server
+    }
+    sort.Slice(r.hashes, func(a, b int) bool { return r.hashes[a] < r.hashes[b] })
+}
+
+func (r *Ring) Get(key string) string {
+    if len(r.hashes) == 0 {
+        return ""
+    }
+    h := crc32.ChecksumIEEE([]byte(key))
+    i := sort.Search(len(r.hashes), func(i int) bool { return r.hashes[i] >= h })
+    if i == len(r.hashes) {
+        i = 0 // past the last point: wrap around the ring
+    }
+    return r.owners[r.hashes[i]]
+}</script>
+
+<script type="text/plain" id="c-ring-use">ring := NewRing(150)
+for _, s := range []string{"cache-0", "cache-1", "cache-2", "cache-3"} {
+    ring.Add(s)
+}
+
+fmt.Println(ring.Get("user:42")) // the same key always maps to the same server
+ring.Add("cache-4")               // only ~1/5 of keys move to the new server</script>
+
+<template id="tpl-retries-backoff">
+<article>
+<header>
+  <h1>Retries done right: backoff, jitter and circuit breakers</h1>
+  <div class="meta">Nov 2026, 8 min read</div>
+</header>
+<div class="body">
+<p>Retries feel like free reliability. A call fails, you try again, it works. But a retry is also extra load, sent at exactly the moment a service is struggling. Done carelessly, retries turn a brief slowdown into a full outage. Done well, they're invisible.</p>
+<p>This post covers the three pieces that make retries safe: exponential backoff, jitter, and circuit breakers.</p>
+
+<h2>First: should this be retried at all?</h2>
+<p>Only retry errors that might succeed next time: timeouts, connection resets, <code>503</code>, <code>429</code>. Never retry a <code>400</code> or a validation error; it will fail identically forever.</p>
+<p>And only retry operations that are safe to repeat. Reads are fine. Writes need an <a href="#post-idempotency-keys">idempotency key</a>, or a retry can charge someone twice.</p>
+
+<h2>Exponential backoff</h2>
+<p>Retrying immediately just adds load to a system that's already failing. Instead, wait longer after each failure: 100ms, 200ms, 400ms, 800ms, up to a cap. That gives the downstream service room to recover.</p>
+
+<h2>Jitter: the part people skip</h2>
+<p>Backoff alone has a problem. If 10,000 clients all failed at the same moment, they all retry at 100ms, then all at 200ms, then all at 400ms. You've built a synchronised wave that hits the recovering service at each step.</p>
+<p>Jitter adds randomness so retries spread out. The simplest strong version, often called "full jitter" after an AWS Architecture Blog post, sleeps a random time between zero and the backoff value:</p>
+<pre><code data-src="c-retry"></code></pre>
+<p>The <code>context</code> check matters. If the caller has given up, stop retrying immediately instead of burning work nobody will see.</p>
+
+<h2>Retry amplification</h2>
+<p>Here's the trap in microservices. Service A calls B, B calls C, C calls the database. If every layer retries 3 times, one failing database call can turn into 3 × 3 × 3 = 27 attempts at the bottom. Under load, retries multiply exactly where the system is weakest.</p>
+<p>Two defences:</p>
+<ul>
+  <li><strong>Retry at one layer only</strong>, usually the one closest to the user or the one that owns the operation.</li>
+  <li><strong>Use a retry budget</strong>: allow retries only while they're a small fraction (say 10%) of total requests. gRPC's retry throttling works this way.</li>
+</ul>
+
+<h2>Circuit breakers: stop calling a dead service</h2>
+<p>If a dependency is clearly down, every request still waits for a timeout before failing. That ties up threads and connections, and the slowness spreads upstream. A circuit breaker notices repeated failures and fails fast instead:</p>
+<ul>
+  <li><strong>Closed:</strong> requests flow normally; failures are counted.</li>
+  <li><strong>Open:</strong> after too many failures, requests fail immediately without calling the dependency.</li>
+  <li><strong>Half-open:</strong> after a cooldown, let a trial request through. If it succeeds, close the circuit; if not, open it again.</li>
+</ul>
+<pre><code data-src="c-breaker"></code></pre>
+<p>This version is deliberately small: in half-open state several concurrent requests can slip through, and it counts consecutive failures rather than a failure rate over a time window. For production, a library like <code>sony/gobreaker</code> handles those details.</p>
+
+<h2>Putting it together</h2>
+<table>
+  <tr><th>Tool</th><th>Protects against</th></tr>
+  <tr><td>Timeouts</td><td>Waiting forever on a slow call</td></tr>
+  <tr><td>Retries with backoff and jitter</td><td>Brief, transient failures</td></tr>
+  <tr><td>Retry budget</td><td>Retries multiplying across layers</td></tr>
+  <tr><td>Circuit breaker</td><td>Hammering a dependency that's down</td></tr>
+  <tr><td>Idempotency keys</td><td>Retries causing duplicate side effects</td></tr>
+</table>
+<p>None of these is complicated on its own. Reliability comes from using all of them together, so that a struggling dependency gets less traffic, not more.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-retry">var errNotRetryable = errors.New("not retryable")
+
+func Retry(ctx context.Context, attempts int, base, max time.Duration, fn func() error) error {
+    var err error
+    for i := 0; i < attempts; i++ {
+        if err = fn(); err == nil || errors.Is(err, errNotRetryable) {
+            return err
+        }
+        if i == attempts-1 {
+            break // out of attempts, don't sleep for nothing
+        }
+
+        backoff := base << i // 100ms, 200ms, 400ms, ...
+        if backoff > max || backoff <= 0 {
+            backoff = max
+        }
+        sleep := time.Duration(rand.Int63n(int64(backoff))) // full jitter
+
+        select {
+        case <-time.After(sleep):
+        case <-ctx.Done():
+            return ctx.Err()
+        }
+    }
+    return err
+}</script>
+
+<script type="text/plain" id="c-breaker">var ErrOpen = errors.New("circuit open")
+
+type Breaker struct {
+    mu        sync.Mutex
+    state     string // "closed", "open" or "half-open"
+    failures  int
+    threshold int
+    cooldown  time.Duration
+    openedAt  time.Time
+}
+
+func NewBreaker(threshold int, cooldown time.Duration) *Breaker {
+    return &Breaker{state: "closed", threshold: threshold, cooldown: cooldown}
+}
+
+func (b *Breaker) Call(fn func() error) error {
+    b.mu.Lock()
+    if b.state == "open" {
+        if time.Since(b.openedAt) < b.cooldown {
+            b.mu.Unlock()
+            return ErrOpen // fail fast, don't touch the dependency
+        }
+        b.state = "half-open" // cooldown over: allow a trial request
+    }
+    b.mu.Unlock()
+
+    err := fn()
+
+    b.mu.Lock()
+    defer b.mu.Unlock()
+    if err != nil {
+        b.failures++
+        if b.state == "half-open" || b.failures >= b.threshold {
+            b.state, b.openedAt = "open", time.Now()
+        }
+        return err
+    }
+    b.state, b.failures = "closed", 0
+    return nil
+}</script>
+
+<template id="tpl-go-worker-pools">
+<article>
+<header>
+  <h1>Bounded concurrency in Go: worker pools and errgroup</h1>
+  <div class="meta">Nov 2026, 6 min read</div>
+</header>
+<div class="body">
+<p>Go makes concurrency so cheap that the first instinct is to start a goroutine per item. For 10 items that's fine. For 100,000 database rows it means 100,000 open connections, a rate-limited API returning 429s, and possibly an out-of-memory crash. The fix is <strong>bounded concurrency</strong>: process many items, but only N at a time.</p>
+
+<h2>The modern answer: errgroup with SetLimit</h2>
+<p>If each task can fail and you want to stop everything on the first error, <code>golang.org/x/sync/errgroup</code> does almost all the work:</p>
+<pre><code data-src="c-eg"></code></pre>
+<p>Three things happen for free here. <code>SetLimit(8)</code> makes <code>g.Go</code> block once 8 tasks are running, so you never have more than 8 in flight. <code>WithContext</code> cancels the context when any task fails, so the others can stop early. And <code>g.Wait()</code> returns the first error.</p>
+<p>Writing into <code>results[i]</code> from several goroutines is safe because each goroutine writes a different index, and it keeps the output in input order.</p>
+
+<h2>The classic pattern: a channel-based worker pool</h2>
+<p>When work arrives as a stream rather than a slice, or workers need long-lived state like a connection, use a fixed set of workers reading from a channel:</p>
+<pre><code data-src="c-pool"></code></pre>
+<p>The goroutine at the end is the detail people forget. Someone has to close <code>results</code> once every worker is done, or the consumer ranging over it waits forever.</p>
+
+<h2>Bugs that show up in code review</h2>
+<ul>
+  <li><strong>Unbounded fan-out.</strong> <code>for _, x := range items { go work(x) }</code> with no limit. Fine in a demo, an incident in production.</li>
+  <li><strong>Goroutine leaks.</strong> A worker blocked forever sending to a channel nobody reads. Always pair sends with a <code>ctx.Done()</code> case, as in the pool above.</li>
+  <li><strong>Loop variable capture.</strong> Before Go 1.22, every closure in a loop shared one variable, so all goroutines could see the last item. Go 1.22 gives each iteration its own variable; on older versions, copy it (<code>id := id</code>).</li>
+  <li><strong>Ignoring the context.</strong> If <code>process</code> doesn't take and respect <code>ctx</code>, cancelling the group does nothing for work already running.</li>
+</ul>
+
+<h2>Picking N</h2>
+<p>For CPU-bound work, start near <code>runtime.NumCPU()</code>. For I/O-bound work, the limit is usually set by whatever you're calling: database pool size, an API's rate limit, or a downstream service's capacity. Make it configurable, measure, and adjust. The right number is rarely the first guess.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-eg">func fetchAll(ctx context.Context, ids []string) ([]Result, error) {
+    g, ctx := errgroup.WithContext(ctx)
+    g.SetLimit(8) // at most 8 fetches in flight
+
+    results := make([]Result, len(ids))
+    for i, id := range ids { // Go 1.22+: i and id are fresh each iteration
+        g.Go(func() error {
+            r, err := fetch(ctx, id)
+            if err != nil {
+                return fmt.Errorf("fetch %s: %w", id, err)
+            }
+            results[i] = r // each goroutine writes its own index
+            return nil
+        })
+    }
+    if err := g.Wait(); err != nil {
+        return nil, err // first error; ctx was cancelled for the rest
+    }
+    return results, nil
+}</script>
+
+<script type="text/plain" id="c-pool">func workerPool(ctx context.Context, jobs <-chan Job, workers int) <-chan Result {
+    results := make(chan Result)
+    var wg sync.WaitGroup
+
+    for w := 0; w < workers; w++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            for job := range jobs {
+                select {
+                case results <- handle(job):
+                case <-ctx.Done():
+                    return // nobody is listening any more
+                }
+            }
+        }()
+    }
+
+    go func() {
+        wg.Wait()      // when every worker has finished...
+        close(results) // ...tell the consumer there's nothing left
+    }()
+    return results
+}</script>
+
+<template id="tpl-java-8-to-17">
+<article>
+<header>
+  <h1>Upgrading from Java 8 to Java 17: a practical checklist</h1>
+  <div class="meta">Nov 2026, 7 min read</div>
+</header>
+<div class="body">
+<p>I led a Java 8 to 17 upgrade at Barclays. Plenty of codebases are still on 8, and the jump looks scarier than it is. Most of the breakage falls into a handful of predictable buckets. Here's the checklist I'd use again.</p>
+
+<h2>Why bother</h2>
+<p>Java 17 is a long-term support release with nine years of improvements on top of 8: records, switch expressions, text blocks, <code>var</code>, sealed classes, NullPointerException messages that name the null variable, and better garbage collectors. Newer frameworks also require it; Spring Boot 3 needs Java 17 as a minimum.</p>
+
+<h2>1. Find internal API usage before you touch anything</h2>
+<p>The JDK ships a tool for exactly this:</p>
+<pre><code data-src="c-jdeps"></code></pre>
+<p>It lists every class that depends on JDK internals such as <code>sun.misc</code> and suggests replacements. Since Java 17, these internals are strongly encapsulated and the old <code>--illegal-access</code> escape hatch is gone, so this list is your to-do list.</p>
+
+<h2>2. Add back the Java EE modules</h2>
+<p>Java 11 removed the Java EE and CORBA modules from the JDK. Code that compiled fine on 8 suddenly can't find <code>javax.xml.bind</code> (JAXB), <code>javax.annotation</code> or the JAX-WS classes. They still exist; they're just separate dependencies now:</p>
+<pre><code data-src="c-pom"></code></pre>
+
+<h2>3. Upgrade the build and test tooling</h2>
+<p>Old versions of the tools around your code break before your code does:</p>
+<table>
+  <tr><th>Tool</th><th>What to check</th></tr>
+  <tr><td>Maven</td><td>Compiler plugin with <code>&lt;release&gt;17&lt;/release&gt;</code></td></tr>
+  <tr><td>Gradle</td><td>7.3 or later to run on Java 17</td></tr>
+  <tr><td>Lombok</td><td>1.18.22 or later</td></tr>
+  <tr><td>JaCoCo</td><td>0.8.8 or later; older versions can't read Java 17 class files</td></tr>
+  <tr><td>Mockito, ByteBuddy</td><td>Recent versions; old ones can't instrument Java 17 classes</td></tr>
+  <tr><td>Spring Boot</td><td>A 2.x release that supports Java 17 (2.5.5+), or 3.x</td></tr>
+</table>
+
+<h2>4. Fix the JVM flags</h2>
+<p>Startup scripts are a quiet source of failures. Java 9 replaced the old GC logging flags with unified logging, and some old flags now stop the JVM from starting at all. <code>-XX:+PrintGCDateStamps</code> is the classic example; replace the old set with <code>-Xlog:gc*</code>. The CMS collector was removed in Java 14, and G1 has been the default since Java 9, so check any tuning you did for the old defaults.</p>
+
+<h2>5. Watch for behaviour changes</h2>
+<ul>
+  <li><strong>TLS:</strong> TLS 1.0 and 1.1 are disabled by default. Old internal endpoints may stop accepting connections.</li>
+  <li><strong>Nashorn:</strong> the JavaScript engine was removed in Java 15. Anything using <code>ScriptEngine</code> for JS needs a replacement.</li>
+  <li><strong>Reflection:</strong> libraries that poke at private JDK fields fail with <code>InaccessibleObjectException</code>. Upgrade the library; use <code>--add-opens</code> only as a last, documented resort.</li>
+</ul>
+
+<h2>6. Let the tests carry you</h2>
+<p>The single biggest factor in how smooth this goes is test coverage. On the Barclays project we also pushed the JUnit suite to 100% coverage, and that's what makes an upgrade like this safe: a compatibility break shows up as a failing test, not a production incident. If your coverage is thin, write tests around the risky areas (serialisation, reflection, TLS calls, date handling) before you switch.</p>
+
+<h2>The order that works</h2>
+<ol>
+  <li>Run <code>jdeps</code> and list everything that needs changing.</li>
+  <li>Upgrade libraries and build tools while still on Java 8.</li>
+  <li>Switch the compiler to 17 and fix compile errors.</li>
+  <li>Run the full test suite, then fix JVM flags and runtime behaviour.</li>
+  <li>Only then start using records, text blocks and the other new features.</li>
+</ol>
+<p>Done in that order, each step is small, testable and easy to roll back.</p>
+</div>
+</article>
+</template>
+
+<script type="text/plain" id="c-jdeps">jdeps --jdk-internals --multi-release 17 -cp 'lib/*' target/app.jar</script>
+
+<script type="text/plain" id="c-pom"><!-- JAXB, removed from the JDK in Java 11 -->
+<dependency>
+    <groupId>jakarta.xml.bind</groupId>
+    <artifactId>jakarta.xml.bind-api</artifactId>
+    <version>2.3.3</version>
+</dependency>
+<dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>2.3.8</version>
+</dependency>
+
+<!-- @PostConstruct, @PreDestroy and friends -->
+<dependency>
+    <groupId>javax.annotation</groupId>
+    <artifactId>javax.annotation-api</artifactId>
+    <version>1.3.2</version>
+</dependency></script>
+
+
+<script>
+var LC_RATINGS=[1466,1434,1407,1382,1341,1346,1343,1308,1290,1272,1290,1307,1303,1328,1340,1324,1309,1293,1306,1314,1313,1296,1312,1341,1332,1368,1401,1407,1415,1428,1423,1436,1444,1450,1441,1471,1472,1484,1517,1533,1565,1559,1575,1568,1588,1565,1580,1591,1575,1572,1572,1572,1586,1631,1622,1633,1663,1680,1697,1678,1673,1693,1683,1731,1744,1721,1728,1720,1722,1702,1723,1712,1716,1713,1701,1705,1708,1700,1710,1704,1699,1689,1688,1686,1710,1674,1692,1680,1683,1661,1664,1650,1652,1656,1674,1688,1690,1680,1663,1649,1695,1702,1722,1735,1719,1734,1744,1757,1731,1755,1747,1738,1762,1759,1730,1751,1782,1824,1830,1853,1852,1889,1878];
+var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5,6,1,1,3,7,1,2,1,1,2,2,3,1,1,3,1,2,7,3,2,1,3,1,1,5,6,1,1,1,1,3,1,10,5,9,5,3,1,1,1,1,6,3,1,1,9,11,2,2,1,5,1,2,6,1,2,1,1,1,1,10,8,2,1,1,1,3,6,1,5,3,1,9,9,5,3,4,1,4,1,1,16,1,1,1,1,1,8,7,1,1,2,1,3,2,6,1,1,1,3,1,15,11,1,1,2,1,1,1,4,1,1,1,1,1,13,9,1,2,1,1,1,6,11,34,3,4,2,6,1,2,1,1,1,1,1,1,1,1,0,1,1,1,2,6,3,3,1,0,0,0,0,5,1,3,2,0,2,5,0,0,0,0,0,0,10,8,0,0,0,0,0,0,2,0,0,0,0,0,2,3,0,1,0,0,0,0,3,4,1,0,0,0,0,1,1,1,1,1,3,4,0,1,0,0,0,0,0,0,0,1,7,6,1,5,4,1,6,1,1,7,1,2,8,3,1,2,5,2,3,2,1,1,1,1,5,1,1,2,1,1,1,1,3,1,1,1,3,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,3,1,1,4,1,2,2,1,1,2,5,3,3,4,2,2,3,4,14,3,1,12,8,3,10,5,12,7,4,8,22,9,6,4,6,2,17,10,10,9,1,2,1,1,6,4,2,16,2,7,1,2,12,1,2,1,1,1,10,1,2,3,3,1,1,1,2];
+(function () {
+  var POSTS = [
+    { slug: 'consistent-hashing', title: 'Consistent hashing, explained with 100,000 keys', date: 'Nov 2026', mins: 7, tags: ['System design', 'Go'] },
+    { slug: 'retries-backoff', title: 'Retries done right: backoff, jitter and circuit breakers', date: 'Nov 2026', mins: 8, tags: ['System design', 'Go'] },
+    { slug: 'go-worker-pools', title: 'Bounded concurrency in Go: worker pools and errgroup', date: 'Nov 2026', mins: 6, tags: ['Go'] },
+    { slug: 'java-8-to-17', title: 'Upgrading from Java 8 to Java 17: a practical checklist', date: 'Nov 2026', mins: 7, tags: ['Java'] },
+    { slug: 'rate-limiting-in-go', title: 'Rate limiting in Go: token bucket vs sliding window', date: 'Nov 2026', mins: 8, tags: ['System design', 'Go'] },
+    { slug: 'idempotency-keys', title: 'Idempotency keys: how APIs avoid charging you twice', date: 'Nov 2026', mins: 7, tags: ['System design'] },
+    { slug: 'leetcode-patterns', title: 'The handful of patterns behind most LeetCode problems', date: 'Nov 2026', mins: 6, tags: ['Interviews'] }
+  ];
+
+  function postList(el, tag, limit) {
+    var list = POSTS.filter(function (p) { return !tag || p.tags.indexOf(tag) !== -1; });
+    if (limit) list = list.slice(0, limit);
+    el.innerHTML = list.map(function (p) {
+      return '<a class="post-link" href="#post-' + p.slug + '"><div class="pt">' + p.title + '</div><div class="pd">' + p.date + ' · ' + p.mins + ' min read' +
+        p.tags.map(function (t) { return '<span class="ptag">' + t + '</span>'; }).join('') + '</div></a>';
+    }).join('');
+  }
+  postList(document.getElementById('home-posts'), null, 4);
+  postList(document.getElementById('all-posts'));
+
+  // topic filter on the blog page
+  var chipsEl = document.getElementById('blog-chips');
+  var topics = ['All'];
+  POSTS.forEach(function (p) { p.tags.forEach(function (t) { if (topics.indexOf(t) === -1) topics.push(t); }); });
+  chipsEl.innerHTML = topics.map(function (t, i) {
+    var n = t === 'All' ? POSTS.length : POSTS.filter(function (p) { return p.tags.indexOf(t) !== -1; }).length;
+    return '<button class="chip" aria-pressed="' + (i === 0) + '" data-t="' + t + '">' + t + ' <span>' + n + '</span></button>';
+  }).join('');
+  chipsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    chipsEl.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b); });
+    postList(document.getElementById('all-posts'), b.dataset.t === 'All' ? null : b.dataset.t);
+  });
+
+  // ---- routing ----
+  var slot = document.getElementById('post-slot');
+  function route() {
+    var h = (location.hash || '').slice(1);
+    var body = document.body;
+    var prev = body.getAttribute('data-view');
+    if (h.indexOf('post-') === 0 && document.getElementById('tpl-' + h.slice(5))) {
+      slot.innerHTML = '';
+      slot.appendChild(document.getElementById('tpl-' + h.slice(5)).content.cloneNode(true));
+      slot.querySelectorAll('code[data-src]').forEach(function (c) {
+        var s = document.getElementById(c.getAttribute('data-src')); if (s) c.textContent = s.textContent;
+      });
+      body.setAttribute('data-view', 'post');
+      document.title = slot.querySelector('h1').textContent + ' | Vaibhav Gawad';
+      window.scrollTo(0, 0);
+    } else if (h === 'blog') {
+      body.setAttribute('data-view', 'blog');
+      document.title = 'Blog | Vaibhav Gawad';
+      window.scrollTo(0, 0);
+    } else {
+      body.setAttribute('data-view', 'home');
+      document.title = 'Vaibhav Gawad';
+      var t = h && h !== 'home' && document.getElementById(h);
+      if (t) { if (prev !== 'home') t.scrollIntoView(); }
+      else if (prev !== 'home' || h === 'home') window.scrollTo(0, 0);
+    }
+  }
+  window.addEventListener('hashchange', route);
+  route();
+
+  // ---- experience accordions ----
+  document.querySelectorAll('.row').forEach(function (row) {
+    var btn = row.querySelector('button');
+    if (!row.querySelector('.more')) return;
+    btn.addEventListener('click', function () {
+      var open = row.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+
+  // ---- reveal-on-scroll for cards and timeline (one blur-fade each) ----
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lazy = document.querySelectorAll('.card, .tl li, #leetcode .intro, .lcx .box, #stats .sec, #writing .sec, #contact .intro, .yt');
+  if ('IntersectionObserver' in window && !reduce) {
+    lazy.forEach(function (el, i) { el.style.opacity = '0'; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        el.style.opacity = '';
+        el.classList.add('bf');
+        el.style.setProperty('--i', el.dataset.k || 0);
+        io.unobserve(el);
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.grid .card').forEach(function (c, i) { c.dataset.k = i % 2; });
+    lazy.forEach(function (el) { io.observe(el); });
+  }
+
+  // ---- LeetCode: rating chart, gauge, bars, heatmap ----
+  (function () {
+    var NS = 'http://www.w3.org/2000/svg';
+    // rating chart
+    var R = LC_RATINGS, W = 600, H = 150, pad = 8;
+    var lo = Math.min.apply(null, R) - 30, hi = Math.max.apply(null, R) + 30;
+    function X(i) { return pad + i * (W - 2 * pad) / (R.length - 1); }
+    function Y(v) { return H - pad - (v - lo) / (hi - lo) * (H - 2 * pad); }
+    var d = R.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ');
+    var chart = document.getElementById('lc-chart');
+    chart.insertAdjacentHTML('beforeend',
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-label="Contest rating from 1,466 in 2021 to 1,878 in 2024, peak 1,889">' +
+      '<defs><linearGradient id="lcfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b" stop-opacity=".28"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + d + ' L' + X(R.length - 1) + ' ' + H + ' L' + X(0) + ' ' + H + 'Z" fill="url(#lcfill)"/>' +
+      '<path id="lc-line" d="' + d + '" fill="none" stroke="#f59e0b" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
+      '<line id="lc-vl" x1="0" x2="0" y1="0" y2="' + H + '" stroke="currentColor" stroke-opacity=".2" vector-effect="non-scaling-stroke" style="display:none"/>' +
+      '<circle id="lc-dot" r="4" fill="#f59e0b" stroke="var(--card)" stroke-width="2" cx="' + X(R.length - 1) + '" cy="' + Y(R[R.length - 1]) + '" vector-effect="non-scaling-stroke"/>' +
+      '</svg><div class="axis"><span>Sep 2021</span><span>Aug 2024</span></div>');
+    var svg = chart.querySelector('svg'), tip = document.getElementById('lc-tip'), dot = document.getElementById('lc-dot'), vl = document.getElementById('lc-vl');
+    function show(i) {
+      var x = X(i), y = Y(R[i]);
+      dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+      vl.setAttribute('x1', x); vl.setAttribute('x2', x); vl.style.display = '';
+      var rect = svg.getBoundingClientRect();
+      tip.style.left = (x / W * rect.width) + 'px';
+      tip.style.top = (y / H * rect.height) + 'px';
+      tip.textContent = 'Contest ' + (i + 1) + ' · ' + R[i].toLocaleString();
+      var f = x / W; tip.style.transform = f > 0.85 ? 'translate(-100%, -120%)' : f < 0.15 ? 'translate(0, -120%)' : 'translate(-50%, -120%)';
+    }
+    svg.addEventListener('pointermove', function (e) {
+      var r = svg.getBoundingClientRect();
+      var i = Math.round(((e.clientX - r.left) / r.width * W - pad) / (W - 2 * pad) * (R.length - 1));
+      show(Math.max(0, Math.min(R.length - 1, i)));
+    });
+    svg.addEventListener('pointerleave', function () { show(R.length - 1); vl.style.display = 'none'; });
+    show(R.length - 1); vl.style.display = 'none';
+
+    // gauge: 270 degree track, three segments sized by each difficulty's share of solved
+    var g = document.getElementById('lc-gauge'), r = 44, C = 2 * Math.PI * r, span = 0.75 * C, gap = 6;
+    var parts = [[466, '#00b8a3'], [710, '#ffc01e'], [95, '#ef4743']], tot = 1271;
+    var html = '<svg viewBox="0 0 100 100" aria-hidden="true"><g transform="rotate(135 50 50)">' +
+      '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="var(--soft)" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + span + ' ' + C + '"/>';
+    var off = 0;
+    parts.forEach(function (p) {
+      var len = Math.max(0, p[0] / tot * span - gap);
+      html += '<circle class="arc" cx="50" cy="50" r="' + r + '" fill="none" stroke="' + p[1] + '" stroke-width="6" stroke-linecap="round" ' +
+        'stroke-dasharray="0 ' + C + '" data-len="' + len + '" stroke-dashoffset="' + (-off) + '"/>';
+      off += p[0] / tot * span;
+    });
+    g.insertAdjacentHTML('afterbegin', html + '</g></svg>');
+
+    var reduceM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var played = false;
+    function play() {
+      if (played) return; played = true;
+      g.querySelectorAll('.arc').forEach(function (a) { a.setAttribute('stroke-dasharray', a.getAttribute('data-len') + ' ' + C); });
+      document.querySelectorAll('.bar i').forEach(function (b) { b.style.width = b.getAttribute('data-w') + '%'; });
+      var n = document.getElementById('lc-solved');
+      if (reduceM) return;
+      var t0 = null;
+      (function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / 1300);
+        n.textContent = Math.round(1271 * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { play(); o.disconnect(); } }, { threshold: 0.35 }).observe(g);
+    } else play();
+
+    // heatmap for 2023 (Jan 1 2023 was a Sunday)
+    var D = LC_2023, cell = 10, step = 12, top = 14, cols = Math.ceil(D.length / 7);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var h = '<svg viewBox="0 0 ' + (cols * step) + ' ' + (top + 7 * step) + '" role="img" aria-label="Daily LeetCode submissions in 2023">';
+    var lastMonth = -1;
+    for (var i = 0; i < D.length; i++) {
+      var dt = new Date(Date.UTC(2023, 0, 1 + i)), col = Math.floor(i / 7), row = i % 7, m = dt.getUTCMonth();
+      if (m !== lastMonth && row === 0 || (i === 0)) { if (m !== lastMonth) { h += '<text x="' + (col * step) + '" y="9">' + months[m] + '</text>'; lastMonth = m; } }
+      var c = D[i], lv = c === 0 ? 0 : c <= 2 ? 1 : c <= 5 ? 2 : c <= 10 ? 3 : 4;
+      h += '<rect class="h' + lv + '" x="' + (col * step) + '" y="' + (top + row * step) + '" width="' + cell + '" height="' + cell + '" rx="2"><title>' +
+        c + ' submission' + (c === 1 ? '' : 's') + ' on ' + months[m] + ' ' + dt.getUTCDate() + '</title></rect>';
+    }
+    document.getElementById('lc-heat').innerHTML = h + '</svg>';
+  })();
+
+  // ---- spotlight + page glow follow the cursor ----
+  var glow = document.getElementById('glow');
+  window.addEventListener('pointermove', function (e) {
+    glow.style.setProperty('--gx', e.clientX + 'px');
+    glow.style.setProperty('--gy', e.clientY + 'px');
+  }, { passive: true });
+  document.querySelectorAll('.spot').forEach(function (el) {
+    el.addEventListener('pointermove', function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--x', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--y', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // ---- cab drives across the top as you scroll ----
+  var cab = document.getElementById('cab'), ticking = false;
+  var wheels = cab.querySelectorAll('.wh'), stops = [];
+  document.querySelectorAll('.route a').forEach(function (l) {
+    var sec = document.getElementById(l.getAttribute('href').slice(1));
+    if (sec) stops.push({ link: l, sec: sec });
+  });
+
+  // trip card numbers count up once the stops have arrived
+  if (!reduce) {
+    document.querySelectorAll('.trip-stats b[data-n]').forEach(function (el) {
+      var target = parseFloat(el.dataset.n), dec = el.dataset.n.indexOf('.') > -1 ? 2 : 0, suf = el.dataset.suf || '';
+      el.textContent = (0).toFixed(dec) + suf;
+      setTimeout(function () {
+        var t0 = null;
+        requestAnimationFrame(function step(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min(1, (ts - t0) / 1200), v = target * (1 - Math.pow(1 - p, 3));
+          el.textContent = (dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US')) + suf;
+          if (p < 1) requestAnimationFrame(step);
+        });
+      }, 1900);
+    });
+  }
+  function moveCab() {
+    ticking = false;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    cab.style.transform = 'translateX(' + (p * (window.innerWidth - 84)) + 'px)';
+    var deg = window.scrollY * 0.9;
+    for (var k = 0; k < wheels.length; k++) wheels[k].style.transform = 'rotate(' + deg + 'deg)';
+    var best = null, mid = window.innerHeight * 0.4;
+    for (var m = 0; m < stops.length; m++) { if (stops[m].sec.getBoundingClientRect().top <= mid) best = stops[m]; }
+    for (var q = 0; q < stops.length; q++) stops[q].link.classList.toggle('on', stops[q] === best);
+  }
+  function queueCab() { if (!ticking) { ticking = true; requestAnimationFrame(moveCab); } }
+  window.addEventListener('scroll', queueCab, { passive: true });
+  window.addEventListener('resize', queueCab);
+  window.addEventListener('hashchange', function () { setTimeout(moveCab, 50); });
+  moveCab();
+
+  // ---- theme ----
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('vg-theme-d', t); } catch (e) {}
+  }
+  document.getElementById('theme-btn').addEventListener('click', function () {
+    setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---- terminal easter egg ----
+  var modal = document.getElementById('term-modal'), out = document.getElementById('term-out'),
+      form = document.getElementById('term-form'), input = document.getElementById('term-in'), lastFocus = null;
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function print(html) { out.insertAdjacentHTML('beforeend', html + '\n'); out.scrollTop = out.scrollHeight; }
+  var greeted = false;
+  function openTerm() {
+    lastFocus = document.activeElement;
+    modal.classList.add('open');
+    if (!greeted) {
+      greeted = true;
+      print('<span class="g">●</span> vaibhav.service - Backend Engineer\n' +
+            '   <span class="dim">Active:</span> <span class="g">active (running)</span> at <span class="b">Uber</span> since Nov 2024\n' +
+            '   <span class="dim">Stack:</span>  go, java, python\n\n' +
+            '<span class="dim">you found the terminal. type</span> help <span class="dim">to look around.</span>');
+    }
+    setTimeout(function () { input.focus(); }, 0);
+  }
+  function closeTerm() { modal.classList.remove('open'); if (lastFocus) lastFocus.focus(); }
+  function goTo(hash) { closeTerm(); location.hash = hash; }
+
+  var cmds = {
+    help: function () {
+      return 'commands:\n' +
+        '  <span class="b">whoami</span>       short intro\n' +
+        '  <span class="b">experience</span>   jump to work history\n' +
+        '  <span class="b">projects</span>     jump to projects\n' +
+        '  <span class="b">blog</span>         read the blog\n' +
+        '  <span class="b">leetcode</span>     stats\n' +
+        '  <span class="b">theme</span>        toggle light / dark\n' +
+        '  <span class="b">contact</span>      how to reach me\n' +
+        '  <span class="b">clear</span>        clear screen\n' +
+        '  <span class="b">exit</span>         close terminal';
+    },
+    whoami: function () { return 'vaibhav gawad. backend engineer at uber, bengaluru.\nprev: barclays (payments infra), microsoft engage \'22.'; },
+    ls: function () { return '<span class="b">about/  work/  projects/  hackathons/  blog/  contact/</span>'; },
+    experience: function () { goTo('work'); return ''; },
+    work: function () { goTo('work'); return ''; },
+    projects: function () { goTo('projects'); return ''; },
+    blog: function () { goTo('blog'); return ''; },
+    contact: function () { goTo('contact'); return ''; },
+    email: function () { return 'gawadvaibhavv@gmail.com'; },
+    leetcode: function () { return 'solved:  1271 / 4115  (easy 466, medium 710, hard 95)\nrating:  1878  <span class="g">knight</span>, top 5.44%\nstreak:  170 days max (2023)'; },
+    theme: function () { document.getElementById('theme-btn').click(); return 'theme switched to ' + document.documentElement.getAttribute('data-theme'); },
+    clear: function () { out.innerHTML = ''; return null; },
+    exit: function () { closeTerm(); return null; },
+    pwd: function () { return '/home/vaibhav'; },
+    date: function () { return new Date().toString(); }
+  };
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var raw = input.value.trim(); input.value = '';
+    if (!raw) return;
+    var low = raw.toLowerCase(), w = low.split(/\s+/);
+    var name = (w[0] === 'cd' || w[0] === 'open') && w[1] ? w[1].replace(/[~\/.]/g, '') : w[0];
+    var res;
+    if (low === 'sudo hire vaibhav') { res = '<span class="g">permission granted.</span> opening contact...'; setTimeout(function () { goTo('contact'); }, 600); }
+    else if (w[0] === 'sudo') res = 'nice try. vaibhav is not in the sudoers file. this incident will be reported.';
+    else if (low === 'rm -rf /') res = 'rate limited. see the blog post on that.';
+    else if (cmds[name]) res = cmds[name]();
+    else res = 'command not found: ' + esc(w[0]) + '. try <span class="b">help</span>';
+    if (res === null) return;
+    print('<span class="p">$</span> ' + esc(raw) + (res ? '\n' + res : ''));
+  });
+
+  document.getElementById('term-btn').addEventListener('click', openTerm);
+  document.getElementById('term-close').addEventListener('click', closeTerm);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeTerm(); });
+  document.addEventListener('keydown', function (e) {
+    var typing = /INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
+    if (e.key === 'Escape' && modal.classList.contains('open')) { closeTerm(); }
+    else if (e.key === '`' && !typing) { e.preventDefault(); openTerm(); }
+  });
+})();
+</script>
+</body>
+</html>
