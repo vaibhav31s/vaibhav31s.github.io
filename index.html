@@ -611,6 +611,11 @@
   @media (max-width: 560px) { .row .d { padding-left: 3.4rem; } .row .more ul { padding-left: 3.4rem; } }
   .stage .s3 { display: none !important; }
   .logo.ico svg { width: 1.4rem; height: 1.4rem; }
+  .row .logo.ico.img, #work .row .logo.ico.img, #work .row.now .logo.ico.img { background: #fff !important; border: 1px solid var(--g2); overflow: hidden; }
+  .logo.ico.img img { width: 70%; height: 70%; object-fit: contain; display: block; }
+  #work .row .logo.ico.uber { background: transparent !important; border: 0; }
+  .logo.ico.uber img { width: 100%; height: 100%; }
+  .logo.ico.microsoft img { width: 58%; height: 58%; }
 </style>
 </head>
 <body data-view="home">
@@ -682,7 +687,7 @@
     <div class="rows">
       <div class="row spot open now bf" style="--i:6">
         <button aria-expanded="true">
-          <span class="logo ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 11h18v5H3z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/></svg></span>
+          <span class="logo ico img uber" aria-hidden="true"><img src="img/logo-uber.png" alt=""></span>
           <span class="mid"><span class="t">Uber <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Software Engineer, Backend</span></span>
           <span class="d">Nov 2024 – Present</span>
         </button>
@@ -694,7 +699,7 @@
       </div>
       <div class="row spot bf" style="--i:7">
         <button aria-expanded="false">
-          <span class="logo ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 9v8M9.5 9v8M14.5 9v8M19 9v8"/><path d="M3 20h18"/></svg></span>
+          <span class="logo ico img barclays" aria-hidden="true"><img src="img/logo-barclays.png" alt=""></span>
           <span class="mid"><span class="t">Barclays <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Technology Graduate Developer</span></span>
           <span class="d">Jul 2024 – Oct 2024</span>
         </button>
@@ -705,7 +710,7 @@
       </div>
       <div class="row spot bf" style="--i:8">
         <button aria-expanded="false">
-          <span class="logo ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 9v8M9.5 9v8M14.5 9v8M19 9v8"/><path d="M3 20h18"/></svg></span>
+          <span class="logo ico img barclays" aria-hidden="true"><img src="img/logo-barclays.png" alt=""></span>
           <span class="mid"><span class="t">Barclays <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">DevOps Intern</span></span>
           <span class="d">Jun 2023 – Aug 2023</span>
         </button>
@@ -717,7 +722,7 @@
       </div>
       <div class="row spot bf" style="--i:9">
         <button aria-expanded="false">
-          <span class="logo ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 5l-3 14"/></svg></span>
+          <span class="logo ico img microsoft" aria-hidden="true"><img src="img/logo-microsoft.png" alt=""></span>
           <span class="mid"><span class="t">Microsoft <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span><span class="s">Engage Mentee</span></span>
           <span class="d">May 2022 – Jul 2022</span>
         </button>
