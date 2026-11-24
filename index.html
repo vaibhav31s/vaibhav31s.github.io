@@ -631,6 +631,40 @@
   }
   button.btn { font-family: inherit; cursor: pointer; border: 0; }
   .contact .cta { flex-wrap: wrap; justify-content: center; }
+
+  /* Live preview: hover a project (or tap Preview) to try the real site in a window */
+  .card[data-live] .art.shot { cursor: zoom-in; }
+  .card .peek { position: absolute; left: 0.6rem; bottom: 0.6rem; z-index: 2; display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.68rem; font-weight: 600; padding: 0.22rem 0.55rem; border-radius: 999px; color: #fff; background: rgba(9,9,11,.72);
+    backdrop-filter: blur(4px); pointer-events: none; transition: opacity .2s; }
+  .card .peek i { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.25); }
+  .card .peek-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--accent); z-index: 2; }
+  .card.arming .peek-bar { width: 100%; transition: width var(--peek-delay, 900ms) linear; }
+  .lk.ghost { background: transparent; color: var(--fg); border: 1px solid var(--border); cursor: pointer; font: inherit; font-size: 0.72rem; font-weight: 500; }
+  .lk.ghost:hover { background: var(--soft); }
+  .lv-modal { position: fixed; inset: 0; z-index: 45; display: none; place-items: center; background: rgba(0,0,0,.5); backdrop-filter: blur(4px); padding: 1.5rem; }
+  .lv-modal.open { display: grid; animation: lv-fade .18s ease-out; }
+  .lv-win { width: min(1200px, 100%); height: min(820px, 100%); display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; box-shadow: 0 40px 100px -24px rgba(0,0,0,.55); animation: lv-pop .2s ease-out; }
+  .lv-bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); background: var(--soft-2); }
+  .lv-dots { display: flex; gap: 0.35rem; } .lv-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .lv-url { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.3rem 0.6rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .lv-url svg { width: 12px; height: 12px; flex: none; color: #16a34a; }
+  .lv-btn { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; color: var(--muted); }
+  .lv-btn:hover { background: var(--soft); color: var(--fg); } .lv-btn:focus-visible { outline: 2px solid var(--accent); }
+  .lv-btn svg { width: 16px; height: 16px; }
+  .lv-body { position: relative; flex: 1; background: #fff; }
+  .lv-body iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  .lv-load { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 0.8rem; background: var(--card); color: var(--muted); font-size: 0.85rem; text-align: center; padding: 1rem; }
+  .lv-load[hidden] { display: none; }
+  .lv-spin { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--accent); animation: lv-rot .8s linear infinite; }
+  .lv-load a { color: var(--fg); }
+  @keyframes lv-rot { to { transform: rotate(360deg); } }
+  @keyframes lv-fade { from { opacity: 0; } }
+  @keyframes lv-pop { from { transform: translateY(8px) scale(.985); opacity: 0; } }
+  @media (max-width: 640px) { .lv-modal { padding: 0; } .lv-win { border-radius: 0; height: 100%; } .lv-dots { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .lv-modal.open, .lv-win { animation: none; } .card.arming .peek-bar { transition: none; } .lv-spin { animation-duration: 2s; } }
 </style>
 </head>
 <body data-view="home">
@@ -814,44 +848,44 @@
       <p>Live and running. Click through and try them.</p>
     </div>
     <div class="grid">
-      <article class="card spot">
+      <article class="card spot" data-live="https://passwords.vaibhavgawad.com/">
         <div class="art shot"><img src="img/passwordmanager.jpg" alt="PassVault password manager landing page" loading="lazy" width="1200" height="675"></div>
         <div class="body">
           <h4>PassVault</h4><time>2022 · rebuilt 2026</time>
           <p>A password vault that encrypts every login before it is stored, with one-click copy and email-to-self. Light and dark themes.</p>
-          <div class="tags"><span class="tag">Django 6</span><span class="tag">PostgreSQL</span><span class="tag">Fernet encryption</span><span class="tag">Vercel</span></div><div class="links"><a class="lk" href="https://passwords.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a></div>
+          <div class="tags"><span class="tag">Django 6</span><span class="tag">PostgreSQL</span><span class="tag">Fernet encryption</span><span class="tag">Vercel</span></div><div class="links"><button class="lk ghost" type="button" data-preview><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button><a class="lk" href="https://passwords.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a></div>
         </div>
       </article>
-      <article class="card spot">
+      <article class="card spot" data-live="https://movies.vaibhavgawad.com/">
         <div class="art shot"><img src="img/movieflex.jpg" alt="MovieFlex home page with movie search and trending posters" loading="lazy" width="1200" height="675"></div>
         <div class="body">
           <h4>MovieFlex</h4><time>Microsoft Engage 2022</time>
           <p>Pick a film you liked and get eight similar ones, matched by story, genre, cast and director across 4,800 movies.</p>
-          <div class="tags"><span class="tag">Django</span><span class="tag">scikit-learn</span><span class="tag">TMDB API</span><span class="tag">Vercel</span></div><div class="links"><a class="lk" href="https://movies.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a><a class="lk" href="https://github.com/vaibhav31s/moviesystem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
+          <div class="tags"><span class="tag">Django</span><span class="tag">scikit-learn</span><span class="tag">TMDB API</span><span class="tag">Vercel</span></div><div class="links"><button class="lk ghost" type="button" data-preview><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button><a class="lk" href="https://movies.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a><a class="lk" href="https://github.com/vaibhav31s/moviesystem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
         </div>
       </article>
-      <article class="card spot">
+      <article class="card spot" data-live="https://stocks.vaibhavgawad.com/">
         <div class="art shot"><img src="img/stockkap.jpg" alt="Stockkap sign-in page" loading="lazy" width="1200" height="675"></div>
         <div class="body">
           <h4>Stockkap</h4><time>Oct 2025</time>
           <p>AI-powered stock analysis: live quotes, watchlists, news sentiment and daily snapshots.</p>
-          <div class="tags"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">Prisma</span><span class="tag">Gemini AI</span></div><div class="links"><a class="lk" href="https://stockerrrr.vercel.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a></div>
+          <div class="tags"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">Prisma</span><span class="tag">Gemini AI</span></div><div class="links"><button class="lk ghost" type="button" data-preview><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button><a class="lk" href="https://stocks.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a></div>
         </div>
       </article>
-      <article class="card spot">
+      <article class="card spot" data-live="https://comments.vaibhavgawad.com/">
         <div class="art shot"><img src="img/commentsystem.jpg" alt="Comment System landing page" loading="lazy" width="1200" height="675"></div>
         <div class="body">
           <h4>Comment System</h4><time>Dec 2023</time>
           <p>A blog platform with nested replies, up and down votes and token-based login.</p>
-          <div class="tags"><span class="tag">React</span><span class="tag">PHP Slim</span><span class="tag">MariaDB</span><span class="tag">Docker</span></div><div class="links"><a class="lk" href="https://comments.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a><a class="lk" href="https://github.com/vaibhav31s/commentSystem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
+          <div class="tags"><span class="tag">React</span><span class="tag">PHP Slim</span><span class="tag">MariaDB</span><span class="tag">Docker</span></div><div class="links"><button class="lk ghost" type="button" data-preview><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button><a class="lk" href="https://comments.vaibhavgawad.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a><a class="lk" href="https://github.com/vaibhav31s/commentSystem" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Source</a></div>
         </div>
       </article>
-      <article class="card spot">
+      <article class="card spot" data-live="https://quickcheck.vaibhavgawad.com/">
         <div class="art shot"><img src="img/quickchecktech.jpg" alt="QuickCheck Tech landing page" loading="lazy" width="1200" height="675"></div>
         <div class="body">
           <h4>QuickCheck Tech</h4><time>Mar 2023</time>
           <p>Attendance with face recognition and an IoT check-in device.</p>
-          <div class="tags"><span class="tag">IoT</span><span class="tag">Next.js</span><span class="tag">Prisma</span><span class="tag">MongoDB</span></div><div class="links"><a class="lk" target="_blank" rel="noopener" href="https://quickchecktech.vercel.app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Website</a></div>
+          <div class="tags"><span class="tag">IoT</span><span class="tag">Next.js</span><span class="tag">Prisma</span><span class="tag">MongoDB</span></div><div class="links"><button class="lk ghost" type="button" data-preview><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button><a class="lk" target="_blank" rel="noopener" href="https://quickcheck.vaibhavgawad.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Live</a></div>
         </div>
       </article>
       <article class="card spot">
@@ -934,6 +968,20 @@
   <button id="theme-btn" aria-label="Toggle dark mode"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="lb">Theme</span></button>
 </nav>
 
+<div class="lv-modal" id="lv-modal" role="dialog" aria-modal="true" aria-labelledby="lv-title">
+  <div class="lv-win">
+    <div class="lv-bar">
+      <div class="lv-dots" aria-hidden="true"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="lv-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="lv-title">Live preview</span></div>
+      <button class="lv-btn" type="button" id="lv-reload" aria-label="Reload preview" title="Reload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+      <a class="lv-btn" id="lv-open" href="#" target="_blank" rel="noopener" aria-label="Open in a new tab" title="Open in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg></a>
+      <button class="lv-btn" type="button" id="lv-close" aria-label="Close preview" title="Close (Esc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="lv-body">
+      <div class="lv-load" id="lv-load"><div class="lv-spin"></div><div id="lv-msg">Loading the live site…</div></div>
+    </div>
+  </div>
+</div>
 <div class="term-modal" id="term-modal" role="dialog" aria-modal="true" aria-label="Terminal">
   <div class="term">
     <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#22d3ee"></i><i style="background:#28c840"></i><span>vaibhav@uber: ~</span><button id="term-close" aria-label="Close terminal">esc</button></div>
@@ -2001,6 +2049,86 @@ var LC_2023=[9,3,1,3,3,4,13,10,1,2,8,12,7,1,4,4,1,1,2,1,9,13,6,11,6,4,1,1,11,2,5
     var typing = /INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
     if (e.key === 'Escape' && modal.classList.contains('open')) { closeTerm(); }
     else if (e.key === '`' && !typing) { e.preventDefault(); openTerm(); }
+  });
+})();
+</script>
+<script>
+/* Live preview window for projects with a working site. */
+(function () {
+  var modal = document.getElementById('lv-modal');
+  if (!modal) return;
+  var body = modal.querySelector('.lv-body'), load = document.getElementById('lv-load'), msg = document.getElementById('lv-msg'),
+      title = document.getElementById('lv-title'), openA = document.getElementById('lv-open');
+  var frame = null, lastFocus = null, slowTimer = null, closedAt = 0, current = '';
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var DELAY = 900;
+
+  function setLoading(on, text) { load.hidden = !on; if (text) msg.innerHTML = text; }
+  function mount(url) {
+    if (frame) frame.remove();
+    frame = document.createElement('iframe');
+    frame.title = 'Live preview of ' + url;
+    frame.setAttribute('allow', 'clipboard-write');
+    frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    frame.addEventListener('load', function () { clearTimeout(slowTimer); setLoading(false); });
+    setLoading(true, 'Loading the live site…');
+    clearTimeout(slowTimer);
+    slowTimer = setTimeout(function () {
+      setLoading(true, 'Still waking up (free hosting can take a few seconds).<br><a href="' + url + '" target="_blank" rel="noopener">Open it in a new tab</a> instead?');
+    }, 9000);
+    frame.src = url;
+    body.appendChild(frame);
+  }
+  function open(card) {
+    var url = card.getAttribute('data-live');
+    if (!url || modal.classList.contains('open')) return;
+    current = url; lastFocus = document.activeElement;
+    title.textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    openA.href = url;
+    modal.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+    mount(url);
+    setTimeout(function () { document.getElementById('lv-close').focus(); }, 0);
+  }
+  function close() {
+    if (!modal.classList.contains('open')) return;
+    modal.classList.remove('open');
+    document.documentElement.style.overflow = '';
+    clearTimeout(slowTimer);
+    if (frame) { frame.remove(); frame = null; }
+    closedAt = Date.now();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('#projects .card[data-live]').forEach(function (card) {
+    var art = card.querySelector('.art'), timer = null;
+    if (art) {
+      art.insertAdjacentHTML('beforeend', '<span class="peek"><i></i>' + (canHover ? 'Hover to try it live' : 'Tap to try it live') + '</span><span class="peek-bar"></span>');
+      art.addEventListener('click', function () { open(card); });
+    }
+    var btn = card.querySelector('[data-preview]');
+    if (btn) btn.addEventListener('click', function () { open(card); });
+    if (!canHover || !art) return;
+    card.style.setProperty('--peek-delay', DELAY + 'ms');
+    art.addEventListener('mouseenter', function () {
+      if (Date.now() - closedAt < 1200) return;
+      card.classList.add('arming');
+      timer = setTimeout(function () { card.classList.remove('arming'); open(card); }, DELAY);
+    });
+    art.addEventListener('mouseleave', function () { clearTimeout(timer); card.classList.remove('arming'); });
+  });
+
+  document.getElementById('lv-close').addEventListener('click', close);
+  document.getElementById('lv-reload').addEventListener('click', function () { if (current) mount(current); });
+  modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); }
+    if (e.key === 'Tab') { /* keep focus inside the window chrome */
+      var f = modal.querySelectorAll('.lv-bar button, .lv-bar a'); var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
   });
 })();
 </script>
